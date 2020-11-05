@@ -3,6 +3,7 @@
 import rospy
 import subprocess, yaml
 import math
+from os.path import join
 import numpy as np
 import rosbag
 import matplotlib.pyplot as plt
@@ -24,6 +25,8 @@ class motionGeneration():
         self.arm = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',
                'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
         self.motion_difference = []
+        self.weights_file_path = '/home/roy/catkin_ws/src/roy_dmp/data/weights'
+        self.rosbag_file_path = '/home/roy/catkin_ws/src/roy_dmp/data/rosbag_recordings'
 
     def getNamesAndMsgList(self, joints, joint_state_msg):
         """ Get the joints for the specified group and return this name list and a list of it's values in joint_states
@@ -54,7 +57,8 @@ class motionGeneration():
     def loadMotionFromJointStates(self, bagname, joints):
         """Load motion from the bag name given """
         # Get bag info
-        self.info_bag = yaml.load(subprocess.Popen(['rosbag', 'info', '--yaml', bagname],stdout=subprocess.PIPE).communicate()[0])
+        file = join(self.rosbag_file_path,bagname)
+        self.info_bag = yaml.load(subprocess.Popen(['rosbag', 'info', '--yaml', file],stdout=subprocess.PIPE).communicate()[0])
         bases_rel_to_time = math.ceil(self.info_bag['duration'] * 20) # empirically for every second 20 bases it's ok
 
         # Create a DMP from the number of joints in the trajectory
@@ -65,7 +69,7 @@ class motionGeneration():
         num_bases = bases_rel_to_time
 
         traj = []
-        bag = rosbag.Bag(bagname)
+        bag = rosbag.Bag(file)
         first_point = True
         for topic, msg, t in bag.read_messages(topics=[DEFAULT_JOINT_STATES]):
             # Get the joint and its values
@@ -98,7 +102,7 @@ class motionGeneration():
         time = self.info_bag['duration']
         rospy.loginfo("Time: " + str(time))
         #rospy.loginfo("DMP result: " + str(self.resp_from_makeLFDRequest))
-        motion_dict = self.saveMotionYAML(bagname + ".yaml", bagname, joints, self.motion_x0, self.motion_goal, self.resp_from_makeLFDRequest, time)
+        motion_dict = self.saveMotionYAML(file + ".yaml", bagname, joints, self.motion_x0, self.motion_goal, self.resp_from_makeLFDRequest, time)
         return motion_dict        
         
 
@@ -125,19 +129,34 @@ class motionGeneration():
                         "computed_dmp" : computed_dmp,
                         "duration" : time}
         #rospy.loginfo("motion_dict:\n" + str(motion_dict))
-        stream = file(yamlname, "w")
-        yaml.dump(motion_dict, stream)
-        self.resp_from_makeLFDRequest = motion_dict["computed_dmp"]
+        file = join(self.weights_file_path, yamlname)
+        try:
+            with open(file, "w") as f:
+                yaml.dump(motion_dict,f)
+            self.result = "success"
+        except:
+            rospy.logerr("Cannot save weight file, Check if the directory of the weight file exist")
+            self.result = "failed"
+        # stream = file(yamlname, "w")
+        # yaml.dump(motion_dict, stream)
+        # self.resp_from_makeLFDRequest = motion_dict["computed_dmp"]
         return motion_dict        
 
     def loadMotionYAML(self, yamlname):
         """Given a yamlname which has a motion saved load it and set it as active in the DMP server"""
+        file = join(self.weights_file_path, yamlname)
+        # try:
+        #     stream = file(yamlname, "r")
+        # except:
+        #     print("Can not find file: " + yamlname)
+        #     return None
         try:
-            stream = file(yamlname, "r")
+            with open(file, "r") as f:
+                motion_dict = yaml.load(f)
         except:
             print("Can not find file: " + yamlname)
-            return None
-        motion_dict = yaml.load(stream)
+            return None 
+        # motion_dict = yaml.load(stream)
         # set it as the active DMP on the dmp server
         self.makeSetActiveRequest(motion_dict['computed_dmp'].dmp_list)
         self.resp_from_makeLFDRequest = motion_dict['computed_dmp']
@@ -176,6 +195,50 @@ class motionGeneration():
         except rospy.ServiceException as e:
             print("Service call failed: %s" %e)
 
+    def getPlan(self, initial_pose, goal_pose, seg_length=-1, initial_velocities=[], t_0 = None, tau=None, dt=None, integrate_iter=None,goal_thresh=[]):
+        """Generate a plan...
+        @initial_pose list of double initial pose for the gesture
+        @goal_pose list of double final pose of the gesture
+        @initial_velocities TODO list of double : initial velocities
+        @t_0 TODO double initial time
+        @goal_thresh TODO list of double : threshold for every joint
+        @seg_length TODO integer... with -1 it's plan until convergence of goal, see docs of DMP
+        @tau TODO
+        @dt TODO
+        @integrate_iter TODO"""
+        x_0 = initial_pose
+        #x_0 = [0.137,-0.264,1.211,0.0395796940422, 0.0202532964694, 0.165785921829]
+        x_dot_0 = [0.0] * len(initial_pose)
+        t_0 = 0
+        
+        goal = goal_pose
+        
+        #goal = [0.259,-0.252,1.289, 0.0212535586323, -0.00664429330438, 0.117483470173]
+        if len(goal_thresh) > 0:
+            this_goal_thresh = goal_thresh
+        else:
+            this_goal_thresh = [0.01] * len(initial_pose)
+        seg_length = seg_length          #Plan until convergence to goal is -1
+        #tau = 2 * self.resp_from_makeLFDRequest.tau       #Desired plan should take twice as long as demo
+        if tau != None:
+            print("input tau != None")
+            print( "its: " + str(tau))
+            this_tau = tau
+        else:
+            print( "input tau == None")
+            this_tau = self.resp_from_makeLFDRequest.tau -1 # HEY WE NEED TO PUT -1 SEC HERE, WHY?? BUG?
+        rospy.logwarn("tau is: " + str(this_tau))
+        if dt != None:
+            this_dt = dt
+        else:
+            this_dt = 0.05
+        if integrate_iter != None:
+            this_integrate_iter = integrate_iter
+        else:
+            this_integrate_iter = 1 #5       #dt is rather large, so this is > 1
+        plan_resp = self.makePlanRequest(x_0, x_dot_0, t_0, goal, this_goal_thresh,
+                               seg_length, this_tau, this_dt, this_integrate_iter)
+        return plan_resp
 
 if __name__ == "__main__":
     rospy.init_node("test_generation_classes")
@@ -184,3 +247,4 @@ if __name__ == "__main__":
                'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
     mg = motionGeneration()
     mg.loadMotionFromJointStates("no_bag_name_set.bag",JOINT_NAMES)
+    

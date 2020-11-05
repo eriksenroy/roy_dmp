@@ -3,6 +3,7 @@
 
 import rospy
 import rosbag
+from os.path import join
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import JointState
 from moveit_msgs.srv import GetPositionIKRequest, GetPositionIKResponse, GetPositionIK
@@ -41,6 +42,7 @@ class RecordFromEndEffector():
         self.groups = groups
         self.motion_name = "no_motion_name"
         self.current_bag_name = "no_bag_name"
+        self.rosbag_file_path = '/home/roy/catkin_ws/src/roy_dmp/data/rosbag_recordings'
         # Subscribe to a PoseStamped topics
         rospy.loginfo("Subscribing to topics...")
         for idx, pose_topic in enumerate(pose_topics):
@@ -70,7 +72,9 @@ class RecordFromEndEffector():
             self.pose_subs[idx].unregister()
         # Write rosbag
         rospy.loginfo("Recording to a rosbag")
-        self.current_rosbag = rosbag.Bag(self.current_bag_name + '.bag','w')
+        file = join(self.rosbag_file_path, self.current_rosbag_name)
+        self.current_rosbag = rosbag.Bag(file + '.bag', 'w')
+        # self.current_rosbag = rosbag.Bag(self.current_bag_name + '.bag','w')
         for idx, poselist in enumerate(self.pose_accumulators):
             for ps in poselist:
                 self.current_bag.write(self.pose_topics[idx], ps, t=ps.header.stamp)
@@ -98,7 +102,8 @@ class RecordFromJointState():
         self.last_joint_states_data = None
         self.joint_states_accumulator = []
         self.motion_name = "no_motion_name"
-        self.joints_to_record = []        
+        self.joints_to_record = []
+        self.rosbag_file_path = '/home/roy/catkin_ws/src/roy_dmp/data/rosbag_recordings'        
 
 
     def joint_states_cb(self, data):
@@ -110,6 +115,7 @@ class RecordFromJointState():
     def start_record(self, motion_name, joints=[], bag_name="no_bag_name_set"):
         """ Start the recording of the joint states, and accumulate the msgs """
         self.current_rosbag_name = bag_name
+        self.motion_name = bag_name
         self.start_recording = True
         if len(joints) > 0:
             self.joints_to_record = joints
@@ -121,7 +127,8 @@ class RecordFromJointState():
         self.start_recording = False
         self.joint_states_subs.unregister()
         rospy.loginfo("Recording in a rosbag")
-        self.current_rosbag = rosbag.Bag(self.current_rosbag_name + '.bag', 'w')
+        file = join(self.rosbag_file_path, self.current_rosbag_name)
+        self.current_rosbag = rosbag.Bag(file + '.bag', 'w')
         for js_msg in self.joint_states_accumulator:
             self.current_rosbag.write(DEFAULT_JOINT_STATES, js_msg, t=js_msg.header.stamp)
         self.current_rosbag.close()
@@ -144,9 +151,10 @@ if __name__=='__main__':
     JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',
                'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
     js_recording = RecordFromJointState()
-    
-    js_recording.start_record('Testing',JOINT_NAMES)
+    rosbag_name_input = raw_input("Type the name of the new rosbag file recording\n")
+    js_recording.start_record('Testing',JOINT_NAMES,rosbag_name_input)
 
-    rospy.sleep(5)
+    raw_input("Type enter to stop recording")
+    # rospy.sleep(5)
     motion_data =  js_recording.stop_record()
     print(motion_data)
