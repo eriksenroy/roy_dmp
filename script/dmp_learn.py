@@ -161,7 +161,7 @@ class motionGeneration():
         try:
             lfd = rospy.ServiceProxy('learn_dmp_from_demo', LearnDMPFromDemo)
             resp = lfd(demotraj,k_gains,d_gains,num_bases)
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             print("Service call failes: %s"%e)
         fin_time = time.time()
         print("LfD done, took: " + str(fin_time - init_time))
@@ -173,7 +173,7 @@ class motionGeneration():
         try:
             sad = rospy.ServiceProxy('set_active_dmp', SetActiveDMP)
             sad(dmp_list)
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             print("Service call failed: %s" %e)
 
 
