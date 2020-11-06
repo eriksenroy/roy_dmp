@@ -104,9 +104,7 @@ class motionGeneration():
         #rospy.loginfo("DMP result: " + str(self.resp_from_makeLFDRequest))
         motion_dict = self.saveMotionYAML(file + ".yaml", bagname, joints, self.motion_x0, self.motion_goal, self.resp_from_makeLFDRequest, time)
         return motion_dict        
-        
-
-
+      
 
     def loadMotionFromBagJointStatesAndRemoveJerkiness(self, bagname, joints, frequency_to_downsample=15):
         """Load motion from the bag name given and remove jerkiness by downsampling and
@@ -240,11 +238,33 @@ class motionGeneration():
                                seg_length, this_tau, this_dt, this_integrate_iter)
         return plan_resp
 
+    def makePlanRequest(self, x_0, x_dot_0, t_0, goal, goal_thresh,
+                        seg_length, tau, dt, integrate_iter):
+        """Generate a plan from a DMP """
+        print("Starting DMP planning...")
+        init_time = time.time()
+        rospy.wait_for_service('get_dmp_plan')
+        try:
+            gdp = rospy.ServiceProxy('get_dmp_plan', GetDMPPlan)
+            resp = gdp(x_0, x_dot_0, t_0, goal, goal_thresh,
+                       seg_length, tau, dt, integrate_iter)
+        except rospy.ServiceException, e:
+            print("Service call failed: %s"%e)
+        fin_time = time.time()
+        print ("DMP planning done, took: " + str(fin_time - init_time))
+    
+        return resp
+
 if __name__ == "__main__":
     rospy.init_node("test_generation_classes")
     rospy.loginfo("Initializing dmp_generation test.")
     JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',
                'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
     mg = motionGeneration()
-    mg.loadMotionFromJointStates("no_bag_name_set.bag",JOINT_NAMES)
+    mg.loadMotionFromJointStates("recording_start1.bag",JOINT_NAMES)
     
+    initial_pose =[-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034, 1.5502419471740723, 9.261386219655172]
+    final_pose = [-2.3324595133410853, -2.2434170881854456, -1.1172669569598597, -1.3543337027179163, 1.5941375494003296, 7.169057373200552]
+
+    pla = mg.getPlan(initial_pose,final_pose,-1,[],None,2,0.008)
+    print(pla)

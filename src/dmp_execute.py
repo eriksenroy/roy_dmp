@@ -7,7 +7,6 @@ from moveit_msgs.msg import RobotState, RobotTrajectory, DisplayTrajectory, Disp
 from trajectory_msgs.msg import JointTrajectoryPoint, JointTrajectory
 from moveit_msgs.srv import ExecuteKnownTrajectory, ExecuteKnownTrajectoryRequest, ExecuteKnownTrajectoryResponse
 from sensor_msgs.msg import JointState
-from kinematics_interface import StateValidity
 from moveit_msgs.msg._DisplayRobotState import DisplayRobotState
 import time
 from visualization_msgs.msg import MarkerArray, Marker
@@ -21,7 +20,7 @@ from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 import tf
 import sys
 sys.path.append("/home/roy/catkin_ws/src/roy_dmp/include/roy_dmp")
-from kinematics_interface import StateValidity
+from kinematics_interface import *
 # from helper_functions import moveit_error_dict
 
 
@@ -45,11 +44,11 @@ class motionExecution():
     def __init__(self):
         rospy.loginfo("Initializing motionExecution")
         rospy.loginfo("Connecting to MoveIt! known trajectory executor server '" + EXECUTE_KNOWN_TRAJ_SRV + "'...")
-        self.execute_known_traj_service = rospy.ServiceProxy(EXECUTE_KNOWN_TRAJ_SRV, ExecuteKnownTrajectory)
-        self.execute_known_traj_service.wait_for_service()
+        # self.execute_known_traj_service = rospy.ServiceProxy(EXECUTE_KNOWN_TRAJ_SRV, ExecuteKnownTrajectory)
+        # self.execute_known_traj_service.wait_for_service()
         rospy.loginfo("Connected.")
         self.sv = StateValidity()
-        self.robot_state_collision_pub = rospy.Publisher('/robot_collision_state', DisplayRobotState)
+        self.robot_state_collision_pub = rospy.Publisher('/robot_collision_state', DisplayRobotState,queue_size=1)
         rospy.sleep(0.1) # Give time to the publisher to register
         #TODO: make ik_service_name a param to load from a yaml
         self.ik_service_name = DEFAULT_IK_SERVICE
@@ -62,10 +61,10 @@ class motionExecution():
         self.arm = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',
                'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
         if DEBUG_MODE:
-            self.pub_ok_markers = rospy.Publisher('ik_ok_marker_list', MarkerArray, latch=True)
+            self.pub_ok_markers = rospy.Publisher('ik_ok_marker_list', MarkerArray, latch=True,queue_size=1)
             self.ok_markers = MarkerArray()
         
-            self.pub_fail_markers = rospy.Publisher('ik_fail_marker_list', MarkerArray, latch=True)
+            self.pub_fail_markers = rospy.Publisher('ik_fail_marker_list', MarkerArray, latch=True,queue_size=1)
             self.fail_markers = MarkerArray()
             self.markers_id = 5 
 
@@ -252,7 +251,7 @@ class motionExecution():
 
         return list_to_iterate, msg_list
 
-    def getIkPose(self, pose, group="right_arm", previous_state=None):
+    def getIkPose(self, pose, group="manipulator", previous_state=None):
         """Get IK of the pose specified, for the group specified, optionally using
         the robot_state of previous_state (if not, current robot state will be requested) """
         req = GetPositionIKRequest()
@@ -269,9 +268,9 @@ class motionExecution():
             current_joint_state = rospy.wait_for_message(DEFAULT_JOINT_STATES, JointState)
             cs = RobotState()
             cs.joint_state = current_joint_state
-            rqst.ik_request.robot_state = cs
+            req.ik_request.robot_state = cs
         else:
-            rqst.ik_request.robot_state = previous_state
+            req.ik_request.robot_state = previous_state
 
         ik_answer = GetPositionIKRequest()
         ik_answer = self.ik_serv.call(req)
@@ -405,7 +404,10 @@ if __name__ == "__main__":
     rospy.init_node("test_execution_classes")
     rospy.loginfo("Initializing dmp_execution test.")
     me = motionExecution()
-      
-
-
+    eepos = me.getCurrentEndEffectorPose('ee_link')
+    epos = eepos.pose
+    print(eepos)
+    iksolu = me.getIkPose(epos)
+    print(iksolu)
+    
           

@@ -152,6 +152,7 @@ if __name__=='__main__':
                'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
     js_recording = RecordFromJointState()
     rosbag_name_input = raw_input("Type the name of the new rosbag file recording\n")
+    raw_input("Type enter to start recording")
     js_recording.start_record('Testing',JOINT_NAMES,rosbag_name_input)
 
     raw_input("Type enter to stop recording")
