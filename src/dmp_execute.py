@@ -4,6 +4,7 @@
 import rospy
 from dmp.srv import GetDMPPlan, GetDMPPlanRequest, GetDMPPlanResponse,LearnDMPFromDemo, LearnDMPFromDemoRequest, SetActiveDMP, SetActiveDMPRequest
 from moveit_msgs.msg import RobotState, RobotTrajectory, DisplayTrajectory, DisplayRobotState
+from rospy.rostime import Time
 from trajectory_msgs.msg import JointTrajectoryPoint, JointTrajectory
 from moveit_msgs.srv import ExecuteKnownTrajectory, ExecuteKnownTrajectoryRequest, ExecuteKnownTrajectoryResponse
 from sensor_msgs.msg import JointState
@@ -404,10 +405,13 @@ if __name__ == "__main__":
     rospy.init_node("test_execution_classes")
     rospy.loginfo("Initializing dmp_execution test.")
     me = motionExecution()
+    init_time = time.time()
     eepos = me.getCurrentEndEffectorPose('ee_link')
+    fin_time = time.time()
     epos = eepos.pose
-    print(eepos)
-    iksolu = me.getIkPose(epos)
-    print(iksolu)
+    print(epos)
+    print ("TF transform done, took: " + str(fin_time - init_time))
+    # iksolu = me.getIkPose(epos)
+    # print(iksolu)
     
           
