@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find ur_gazebo)/launch/ur3.launch" />
+    <include file="$(find dmp)/launch/dmp.launch" />
+</launch>
