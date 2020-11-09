@@ -142,6 +142,7 @@ class StateValidity():
         gsvr = GetStateValidityRequest()
         gsvr.robot_state = robot_state
         gsvr.group_name = group_name
+        # gsvr.check_collisions = True
         if constraints != None:
             gsvr.constraints = constraints
         result = self.sv_srv.call(gsvr)

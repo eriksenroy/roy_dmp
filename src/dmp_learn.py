@@ -14,7 +14,7 @@ from sensor_msgs.msg import JointState
 from moveit_msgs.srv import GetPositionFK, GetPositionFKRequest, GetPositionFKResponse, GetPositionIK, GetPositionIKRequest, GetPositionIKResponse
 from scipy.interpolate import interp1d
 import time
-
+# from dmp_execute import motionEx
 DEFAULT_JOINT_STATES = "/joint_states"
 DEFAULT_FK_SERVICE = "/compute_fk"
 DEFAULT_IK_SERVICE = "/compute_ik"
@@ -271,8 +271,8 @@ if __name__ == "__main__":
     from math import pi
     rospy.init_node("test_generation_classes")
     rospy.loginfo("Initializing dmp_generation test.")
-
-    client = actionlib.SimpleActionClient('/arm_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+    client = actionlib.SimpleActionClient('scaled_pos_joint_traj_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+    # client = actionlib.SimpleActionClient('/arm_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
     print("Waiting for server...")
     client.wait_for_server()
 
@@ -280,39 +280,46 @@ if __name__ == "__main__":
                'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
     mg = motionGeneration()
     mg.loadMotionFromJointStates("recording_start1.bag",JOINT_NAMES)
-    
-    initial_pose =[1.2273033300982874, -0.298889462147848, -1.0177272001849573, -1.3976243177997034, 1.5502419471740723, 9.261386219655172]
+    joint_states = rospy.wait_for_message("joint_states",JointState)
+    initial_pose = [joint_states.position[2],joint_states.position[1],joint_states.position[0],joint_states.position[3],joint_states.position[4],joint_states.position[5]]
+    # initial_pose =[-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034,  1.5502419471740723, 9.261386219655172]
     final_pose = [-2.3324595133410853, -2.2434170881854456, -1.1172669569598597, -1.3543337027179163, 1.5941375494003296, 7.169057373200552]
     pla = DMPTraj()
-    pla = mg.getPlan(initial_pose,final_pose,-1,[],None,tau=8,dt=0.008)
-    # print(pla.plan.times)
+    pla = mg.getPlan(initial_pose,final_pose,-1,[],None,tau=5,dt=0.008)
+    # print(joint_states.position[0])
+    # print(type(joint_states))
 
 
-    g = FollowJointTrajectoryGoal()
-    g.trajectory = JointTrajectory()
-    g.trajectory.joint_names = JOINT_NAMES
+    # g = FollowJointTrajectoryGoal()
+    # g.trajectory = JointTrajectory()
+    # g.trajectory.joint_names = JOINT_NAMES
 
-    try:
-        joint_states = rospy.wait_for_message("joint_states",JointState)
-        joints_pos = [-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034, 1.5502419471740723, 9.261386219655172]
-        # joint_value = pla.plan.points.positions
-        # velocity = pla.points.velocities
-        times = pla.plan.times
-        d= 2.00
-        g.trajectory.points = [JointTrajectoryPoint(positions=joints_pos, velocities=[0]*6, time_from_start=rospy.Duration(0.0))]
-        for i in range(len(pla.plan.times)):
-            joints_pos = pla.plan.points[0].positions
-            joint_value = pla.plan.points[i].positions
-            velocity = pla.plan.points[i].velocities
-            Q = [joint_value[0],joint_value[1],joint_value[2],joint_value[3],joint_value[4],joint_value[5]]
-            V = [velocity[0],velocity[1],velocity[2],velocity[3],velocity[4],velocity[5]]
-            T = times[i]+2
-            g.trajectory.points.append(JointTrajectoryPoint(positions=Q, velocities=[0]*6, time_from_start=rospy.Duration(T)))
-        client.send_goal(g)
-        client.wait_for_result(rospy.Duration(0))
-        print
-    except KeyboardInterrupt:
-        client.cancel_goal()
-        raise
-    except:
-        raise
+    # try:
+    #     # joint_states = rospy.wait_for_message("joint_states",JointState)
+    #     # joints_pos = [-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034, 1.5502419471740723, 9.261386219655172]
+    #     # joint_value = pla.plan.points.positions
+    #     # velocity = pla.points.velocities
+    #     times = pla.plan.times
+    #     d= 2.00
+    #     g.trajectory.points = [JointTrajectoryPoint(positions=initial_pose, velocities=[0]*6, time_from_start=rospy.Duration(0.0))]
+    #     for i in range(len(pla.plan.times)):
+    #         joints_pos = pla.plan.points[0].positions
+    #         joint_value = pla.plan.points[i].positions
+    #         velocity = pla.plan.points[i].velocities
+    #         # print(i)
+    #         Q = [joint_value[0],joint_value[1],joint_value[2],joint_value[3],joint_value[4],joint_value[5]]
+    #         V = [velocity[0],velocity[1],velocity[2],velocity[3],velocity[4],velocity[5]]
+    #         T = times[i]
+    #         # print(Q)
+    #         # print(T)
+    #         # print(pla.plan.points[0].positions)
+    #         # print(initial_pose)
+    #         g.trajectory.points.append(JointTrajectoryPoint(positions=Q, velocities=V, time_from_start=rospy.Duration(T)))
+    #     client.send_goal(g)
+    #     client.wait_for_result(rospy.Duration(0))
+       
+    # except KeyboardInterrupt:
+    #     client.cancel_goal()
+    #     raise
+    # except:
+    #     raise

@@ -20,10 +20,14 @@ from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryG
 from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 import tf
 import sys
+from dmp_learn import motionGeneration
 sys.path.append("/home/roy/catkin_ws/src/roy_dmp/include/roy_dmp")
 from kinematics_interface import *
-# from helper_functions import moveit_error_dict
-
+import roslib; roslib.load_manifest('ur_driver')
+import actionlib
+from trajectory_msgs.msg import *
+from geometry_msgs.msg import Pose
+from math import pi
 
 DEFAULT_JOINT_STATES = '/joint_states'
 EXECUTE_KNOWN_TRAJ_SRV = '/execute_kinematic_path'
@@ -123,7 +127,7 @@ class motionExecution():
         if len(groups) > 0:
             groups_to_check = groups
         else:
-            groups_to_check = ['both_arms_torso'] # Automagic group deduction... giving a group that includes everything 
+            groups_to_check = ['manipulator'] # Automagic group deduction... giving a group that includes everything 
         for traj_point in robot_trajectory.joint_trajectory.points:
             rs = RobotState()
             rs.joint_state.name = robot_trajectory.joint_trajectory.joint_names
@@ -400,18 +404,57 @@ class motionExecution():
         self.markers_id += 1
         return marker
 
+    def sendTrajectoryAction(self,pla,_initial_pose):
+        client = actionlib.SimpleActionClient('scaled_pos_joint_traj_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+        client.wait_for_server()
+        g = FollowJointTrajectoryGoal()
+        g.trajectory = JointTrajectory()
+        g.trajectory.joint_names = self.arm
+        initial_pose = _initial_pose
+        # print("hei")
+        try:
+            times = pla.plan.times
+            d= 2.00
+            g.trajectory.points = [JointTrajectoryPoint(positions=initial_pose, velocities=[0]*6, time_from_start=rospy.Duration(0.0))]
+            for i in range(len(pla.plan.times)):
+                joint_value = pla.plan.points[i].positions
+                velocity = pla.plan.points[i].velocities
+                Q = [joint_value[0],joint_value[1],joint_value[2],joint_value[3],joint_value[4],joint_value[5]]
+                V = [velocity[0],velocity[1],velocity[2],velocity[3],velocity[4],velocity[5]]
+                T = times[i]
+                g.trajectory.points.append(JointTrajectoryPoint(positions=Q, velocities=V, time_from_start=rospy.Duration(T)))
+            client.send_goal(g)
+            # print("hei2")
+            # print(g)
+            client.wait_for_result(rospy.Duration(0))
+        except KeyboardInterrupt:
+            client.cancel_goal()
+            raise
+        except:
+            print("Fault")
+            raise
+        return True
 
 if __name__ == "__main__":
+
     rospy.init_node("test_execution_classes")
     rospy.loginfo("Initializing dmp_execution test.")
     me = motionExecution()
-    init_time = time.time()
-    eepos = me.getCurrentEndEffectorPose('ee_link')
-    fin_time = time.time()
-    epos = eepos.pose
-    print(epos)
-    print ("TF transform done, took: " + str(fin_time - init_time))
-    # iksolu = me.getIkPose(epos)
-    # print(iksolu)
+    mg = motionGeneration()
+    joint_states = rospy.wait_for_message("joint_states",JointState)
+    initial_pose = [joint_states.position[2],joint_states.position[1],joint_states.position[0],joint_states.position[3],joint_states.position[4],joint_states.position[5]]
+    # initial_pose =[-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034,  1.5502419471740723, 9.261386219655172]
+    final_pose = [-2.3324595133410853, -2.2434170881854456, -1.1172669569598597, -1.3543337027179163, 1.5941375494003296, 7.169057373200552]
+    pla = mg.getPlan(initial_pose,final_pose,-1,[],None,tau=5,dt=0.008)
+    print(initial_pose)
+    robot_traj = me.robotTrajectoryFromPlan(pla,me.arm)
+    validity = me.checkTrajectoryValidity(robot_traj)
+    print(validity)
+    if(validity == True):
+        print("Valid trajectory")
+        st = me.sendTrajectoryAction(pla,initial_pose)
+        print("finished")
+    elif(validity == False):
+        print("Not a valid trajectory")
     
           
