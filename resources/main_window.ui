@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1010</width>
+    <height>653</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="1">
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="0">
+        <widget class="QSplitter" name="splitter_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QCheckBox" name="simulationCheckBox">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Simulation</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QLabel" name="RobotIPLabel">
+          <property name="text">
+           <string>Robot IP:</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="IPLineEdit">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>26</height>
+           </size>
+          </property>
+          <property name="placeholderText">
+           <string>192.168.1.128</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QComboBox" name="RobotComboBox">
+         <item>
+          <property name="text">
+           <string>UR3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>UR5</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Ur10</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>UR3e</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>UR5e</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>UR10e</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QPushButton" name="shutDown">
+         <property name="text">
+          <string>Shutdown</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" rowspan="4">
+        <widget class="QPlainTextEdit" name="TerminalPlainTextEdit"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="startButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Start</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1010</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>IPLineEdit</tabstop>
+  <tabstop>RobotComboBox</tabstop>
+  <tabstop>TerminalPlainTextEdit</tabstop>
+  <tabstop>simulationCheckBox</tabstop>
+  <tabstop>startButton</tabstop>
+  <tabstop>shutDown</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

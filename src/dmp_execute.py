@@ -405,7 +405,8 @@ class motionExecution():
         return marker
 
     def sendTrajectoryAction(self,pla,_initial_pose):
-        client = actionlib.SimpleActionClient('scaled_pos_joint_traj_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+        # client = actionlib.SimpleActionClient('scaled_pos_joint_traj_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+        client = actionlib.SimpleActionClient('/arm_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
         client.wait_for_server()
         g = FollowJointTrajectoryGoal()
         g.trajectory = JointTrajectory()
@@ -442,8 +443,8 @@ if __name__ == "__main__":
     me = motionExecution()
     mg = motionGeneration()
     joint_states = rospy.wait_for_message("joint_states",JointState)
-    initial_pose = [joint_states.position[2],joint_states.position[1],joint_states.position[0],joint_states.position[3],joint_states.position[4],joint_states.position[5]]
-    # initial_pose =[-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034,  1.5502419471740723, 9.261386219655172]
+    # initial_pose = [joint_states.position[2],joint_states.position[1],joint_states.position[0],joint_states.position[3],joint_states.position[4],joint_states.position[5]]
+    initial_pose =[-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034,  1.5502419471740723, 9.261386219655172]
     final_pose = [-2.3324595133410853, -2.2434170881854456, -1.1172669569598597, -1.3543337027179163, 1.5941375494003296, 7.169057373200552]
     pla = mg.getPlan(initial_pose,final_pose,-1,[],None,tau=5,dt=0.008)
     print(initial_pose)

@@ -63,7 +63,7 @@ class motionGeneration():
 
         # Create a DMP from the number of joints in the trajectory
         dims = len(joints)
-        dt = 0.02
+        dt = 0.008
         K = 100
         D = 2.0 * np.sqrt(K)
         num_bases = bases_rel_to_time
@@ -271,8 +271,8 @@ if __name__ == "__main__":
     from math import pi
     rospy.init_node("test_generation_classes")
     rospy.loginfo("Initializing dmp_generation test.")
-    client = actionlib.SimpleActionClient('scaled_pos_joint_traj_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
-    # client = actionlib.SimpleActionClient('/arm_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+    # client = actionlib.SimpleActionClient('scaled_pos_joint_traj_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+    client = actionlib.SimpleActionClient('/arm_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
     print("Waiting for server...")
     client.wait_for_server()
 
