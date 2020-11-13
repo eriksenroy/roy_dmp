@@ -1,0 +1,912 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>925</width>
+    <height>626</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="page_1">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QFrame" name="frame_4">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <widget class="QTextEdit" name="textEdit">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:24pt; font-weight:600;&quot;&gt;Welcome to this robot DMP application.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Author: Roy Ove Eriksen&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QFrame" name="frame_3">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QFrame" name="frame_2">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QLabel" name="RobotIPLabel">
+                 <property name="text">
+                  <string>Robot IP:</string>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="IPLineEdit">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>26</height>
+                  </size>
+                 </property>
+                 <property name="placeholderText">
+                  <string>192.168.1.128</string>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QSplitter" name="splitter_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QCheckBox" name="simulationCheckBox">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>25</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Simulation</string>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QFrame" name="frame">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <widget class="QPushButton" name="startButton">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Start</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="shutDownButton">
+                <property name="text">
+                 <string>Shutdown</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QComboBox" name="ChooseRobotcomboBox">
+             <item>
+              <property name="text">
+               <string>UR3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>UR5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>UR10</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_2">
+       <layout class="QGridLayout" name="gridLayout_18">
+        <item row="0" column="0">
+         <widget class="QFrame" name="frame_21">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_13">
+           <item row="0" column="0">
+            <widget class="QSplitter" name="splitter_12">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <widget class="QTabWidget" name="Tab">
+              <property name="tabShape">
+               <enum>QTabWidget::Rounded</enum>
+              </property>
+              <property name="currentIndex">
+               <number>2</number>
+              </property>
+              <widget class="QWidget" name="Recording_tab">
+               <attribute name="title">
+                <string>Recording</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_19">
+                <item row="2" column="1" colspan="4">
+                 <widget class="QFrame" name="frame_22">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_11">
+                   <item>
+                    <widget class="QPushButton" name="start_recording_button">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Start</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="stop_recording_button">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Stop</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QFrame" name="frame_23">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_12">
+                   <item>
+                    <widget class="QRadioButton" name="rec_EE_radio_button">
+                     <property name="text">
+                      <string>End-Effector</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="rec_JS_radio_button">
+                     <property name="text">
+                      <string>Joint_States</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="rec_JS_Filter_radio_button">
+                     <property name="text">
+                      <string>Joint_States with filtering</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLabel" name="label_15">
+                  <property name="text">
+                   <string>Name:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QLineEdit" name="name_recording_line_edit">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="Generate_tab">
+               <attribute name="title">
+                <string>Learning</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_20">
+                <item row="0" column="0">
+                 <widget class="QFrame" name="frame_26">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_15">
+                   <item>
+                    <widget class="QLabel" name="label_22">
+                     <property name="text">
+                      <string>Type of recording to load</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="load_EE_rec_radio_button">
+                     <property name="text">
+                      <string>End-Effector rec</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="load_JS_rec_radio_button">
+                     <property name="text">
+                      <string>Joint_state rec</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QFrame" name="frame_24">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_13">
+                   <item>
+                    <widget class="QSplitter" name="splitter_13">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <widget class="QLabel" name="label_16">
+                      <property name="text">
+                       <string>dt</string>
+                      </property>
+                     </widget>
+                     <widget class="QLineEdit" name="dmp_dt_param_lineedit">
+                      <property name="placeholderText">
+                       <string>Default: 0.008</string>
+                      </property>
+                     </widget>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSplitter" name="splitter_14">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <widget class="QLabel" name="label_17">
+                      <property name="text">
+                       <string>K</string>
+                      </property>
+                     </widget>
+                     <widget class="QLineEdit" name="dmp_K_param_lineedit">
+                      <property name="placeholderText">
+                       <string>Default: 100</string>
+                      </property>
+                     </widget>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSplitter" name="splitter_15">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <widget class="QLabel" name="label_18">
+                      <property name="text">
+                       <string>D</string>
+                      </property>
+                     </widget>
+                     <widget class="QLineEdit" name="dmp_D_param_lineedit">
+                      <property name="placeholderText">
+                       <string>Default: 1</string>
+                      </property>
+                     </widget>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSplitter" name="splitter_16">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <widget class="QLabel" name="label_19">
+                      <property name="text">
+                       <string># basis_func</string>
+                      </property>
+                     </widget>
+                     <widget class="QLineEdit" name="dmp_basisfunc_param_lineedit">
+                      <property name="placeholderText">
+                       <string>Default: 120</string>
+                      </property>
+                     </widget>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QFrame" name="frame_25">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_14">
+                   <item>
+                    <widget class="QSplitter" name="splitter_17">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <widget class="QLabel" name="label_20">
+                      <property name="text">
+                       <string>name of recording</string>
+                      </property>
+                     </widget>
+                     <widget class="QComboBox" name="load_name_rec_comboBox">
+                      <property name="editable">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSplitter" name="splitter_18">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <widget class="QLabel" name="label_21">
+                      <property name="text">
+                       <string>name of output file</string>
+                      </property>
+                     </widget>
+                     <widget class="QLineEdit" name="save_name_dmp_lineedit">
+                      <property name="placeholderText">
+                       <string>ex: recording_start_goal_with</string>
+                      </property>
+                     </widget>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QFrame" name="frame_27">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_16">
+                   <item>
+                    <widget class="QPushButton" name="generate_DMP_button">
+                     <property name="text">
+                      <string>Generate DMP</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="Execute_tab">
+               <attribute name="title">
+                <string>Execute</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_31">
+                <item row="0" column="1">
+                 <widget class="QFrame" name="frame_28">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_7">
+                   <item row="0" column="0">
+                    <widget class="QFrame" name="frame_29">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <widget class="QSplitter" name="splitter_3">
+                      <property name="geometry">
+                       <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>278</width>
+                        <height>25</height>
+                       </rect>
+                      </property>
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <widget class="QLabel" name="label_23">
+                       <property name="text">
+                        <string>Set active DMP</string>
+                       </property>
+                      </widget>
+                      <widget class="QComboBox" name="set_DMP_comboBox">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                      </widget>
+                      <widget class="QPushButton" name="set_active_DMP_pushButton">
+                       <property name="text">
+                        <string>PushButton</string>
+                       </property>
+                      </widget>
+                     </widget>
+                    </widget>
+                   </item>
+                   <item row="0" column="1" rowspan="3">
+                    <widget class="QFrame" name="frame_5">
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_6">
+                      <item row="0" column="0">
+                       <widget class="QPlainTextEdit" name="plainTextEdit">
+                        <property name="autoFillBackground">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QTabWidget" name="tabWidget">
+                     <property name="currentIndex">
+                      <number>0</number>
+                     </property>
+                     <widget class="QWidget" name="jointspace_2">
+                      <attribute name="title">
+                       <string>Joint space</string>
+                      </attribute>
+                      <layout class="QGridLayout" name="gridLayout_24">
+                       <item row="0" column="0">
+                        <widget class="QFrame" name="frame_32">
+                         <property name="frameShape">
+                          <enum>QFrame::StyledPanel</enum>
+                         </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_25">
+                          <item row="1" column="0">
+                           <widget class="QLineEdit" name="set_JointState_init_0_lineEdit">
+                            <property name="placeholderText">
+                             <string>(-pi, pi)</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="3" column="0">
+                           <widget class="QLineEdit" name="set_JointState_init_2_lineEdit"/>
+                          </item>
+                          <item row="6" column="0">
+                           <widget class="QLineEdit" name="set_JointState_init_5_lineEdit"/>
+                          </item>
+                          <item row="2" column="0">
+                           <widget class="QLineEdit" name="set_JointState_init_1_lineEdit"/>
+                          </item>
+                          <item row="4" column="0">
+                           <widget class="QLineEdit" name="set_JointState_init_3_lineEdit"/>
+                          </item>
+                          <item row="7" column="0">
+                           <widget class="QPushButton" name="get_JS_init_robot_pushButton">
+                            <property name="text">
+                             <string>Retrieve from Robot</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="5" column="0">
+                           <widget class="QLineEdit" name="set_JointState_init_4_lineEdit"/>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_25">
+                            <property name="text">
+                             <string>Initial position</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QFrame" name="frame_33">
+                         <property name="frameShape">
+                          <enum>QFrame::StyledPanel</enum>
+                         </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_26">
+                          <item row="2" column="0">
+                           <widget class="QLineEdit" name="set_JointState_goal_1_lineEdit"/>
+                          </item>
+                          <item row="7" column="0">
+                           <widget class="QPushButton" name="get_JS_goal_robot_pushButton">
+                            <property name="text">
+                             <string>Retrieve from robot</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="5" column="0">
+                           <widget class="QLineEdit" name="set_JointState_goal_4_lineEdit"/>
+                          </item>
+                          <item row="4" column="0">
+                           <widget class="QLineEdit" name="set_JointState_goal_3_lineEdit"/>
+                          </item>
+                          <item row="1" column="0">
+                           <widget class="QLineEdit" name="set_JointState_goal_0_lineEdit"/>
+                          </item>
+                          <item row="6" column="0">
+                           <widget class="QLineEdit" name="set_JointState_goal_5_lineEdit"/>
+                          </item>
+                          <item row="3" column="0">
+                           <widget class="QLineEdit" name="set_JointState_goal_2_lineEdit"/>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_26">
+                            <property name="text">
+                             <string>Goal Position</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                     <widget class="QWidget" name="cartesianSpace_2">
+                      <attribute name="title">
+                       <string>Cartesian Space</string>
+                      </attribute>
+                      <layout class="QGridLayout" name="gridLayout_27">
+                       <item row="0" column="0">
+                        <widget class="QFrame" name="frame_34">
+                         <property name="frameShape">
+                          <enum>QFrame::StyledPanel</enum>
+                         </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_28">
+                          <item row="3" column="0">
+                           <widget class="QLineEdit" name="lineEdit_50"/>
+                          </item>
+                          <item row="7" column="0">
+                           <widget class="QLineEdit" name="lineEdit_51"/>
+                          </item>
+                          <item row="2" column="0">
+                           <widget class="QLineEdit" name="lineEdit_52"/>
+                          </item>
+                          <item row="4" column="0">
+                           <widget class="QLineEdit" name="lineEdit_53"/>
+                          </item>
+                          <item row="8" column="0">
+                           <widget class="QPushButton" name="pushButton_15">
+                            <property name="text">
+                             <string>Retrieve from Robot</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="6" column="0">
+                           <widget class="QLineEdit" name="lineEdit_54"/>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_27">
+                            <property name="text">
+                             <string>Initial Pose</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="1" column="0">
+                           <widget class="QLineEdit" name="lineEdit_55"/>
+                          </item>
+                          <item row="5" column="0">
+                           <widget class="QLineEdit" name="lineEdit_56"/>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QFrame" name="frame_35">
+                         <property name="frameShape">
+                          <enum>QFrame::StyledPanel</enum>
+                         </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_29">
+                          <item row="1" column="0">
+                           <widget class="QLineEdit" name="lineEdit_57"/>
+                          </item>
+                          <item row="2" column="0">
+                           <widget class="QLineEdit" name="lineEdit_58"/>
+                          </item>
+                          <item row="4" column="0">
+                           <widget class="QLineEdit" name="lineEdit_59"/>
+                          </item>
+                          <item row="8" column="0">
+                           <widget class="QPushButton" name="pushButton_16">
+                            <property name="text">
+                             <string>Retrieve from Robot</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="6" column="0">
+                           <widget class="QLineEdit" name="lineEdit_60"/>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_28">
+                            <property name="text">
+                             <string>Goal Pose</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="7" column="0">
+                           <widget class="QLineEdit" name="lineEdit_61"/>
+                          </item>
+                          <item row="3" column="0">
+                           <widget class="QLineEdit" name="lineEdit_62"/>
+                          </item>
+                          <item row="5" column="0">
+                           <widget class="QLineEdit" name="lineEdit_63"/>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </widget>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QFrame" name="frame_31">
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_23">
+                      <item row="1" column="0">
+                       <widget class="QFrame" name="frame_36">
+                        <property name="frameShape">
+                         <enum>QFrame::StyledPanel</enum>
+                        </property>
+                        <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_30">
+                         <item row="0" column="0">
+                          <widget class="QPushButton" name="execute_plan_pushButton">
+                           <property name="text">
+                            <string>EXECUTE PLAN</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <widget class="QFrame" name="frame_30">
+                        <property name="frameShape">
+                         <enum>QFrame::StyledPanel</enum>
+                        </property>
+                        <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                        </property>
+                        <widget class="QSplitter" name="splitter_4">
+                         <property name="geometry">
+                          <rect>
+                           <x>10</x>
+                           <y>10</y>
+                           <width>300</width>
+                           <height>25</height>
+                          </rect>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <widget class="QLabel" name="label_24">
+                          <property name="text">
+                           <string>tau</string>
+                          </property>
+                         </widget>
+                         <widget class="QLineEdit" name="set_tau_lineedit">
+                          <property name="maximumSize">
+                           <size>
+                            <width>16777215</width>
+                            <height>28</height>
+                           </size>
+                          </property>
+                          <property name="placeholderText">
+                           <string>Default: 5</string>
+                          </property>
+                         </widget>
+                         <widget class="QPushButton" name="get_DMP_Plan_pushButton">
+                          <property name="text">
+                           <string>Retrieve DMP plan</string>
+                          </property>
+                         </widget>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="Settings_tab">
+               <attribute name="title">
+                <string>Settings</string>
+               </attribute>
+              </widget>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>925</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
