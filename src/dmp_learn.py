@@ -102,7 +102,7 @@ class motionGeneration():
         time = self.info_bag['duration']
         rospy.loginfo("Time: " + str(time))
         #rospy.loginfo("DMP result: " + str(self.resp_from_makeLFDRequest))
-        motion_dict = self.saveMotionYAML(file + ".yaml", bagname, joints, self.motion_x0, self.motion_goal, self.resp_from_makeLFDRequest, time)
+        motion_dict = self.saveMotionYAML(bagname + ".yaml", bagname, joints, self.motion_x0, self.motion_goal, self.resp_from_makeLFDRequest, time)
         return motion_dict        
       
 

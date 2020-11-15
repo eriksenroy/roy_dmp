@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>925</width>
-    <height>626</height>
+    <height>645</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -440,9 +440,9 @@ p, li { white-space: pre-wrap; }
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
                   </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_14">
-                   <item>
-                    <widget class="QSplitter" name="splitter_17">
+                  <layout class="QGridLayout" name="gridLayout_8">
+                   <item row="0" column="0">
+                    <widget class="QSplitter" name="splitter_5">
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
                      </property>
@@ -456,9 +456,20 @@ p, li { white-space: pre-wrap; }
                        <bool>true</bool>
                       </property>
                      </widget>
+                     <widget class="QPushButton" name="Get_recordings_pushButton">
+                      <property name="maximumSize">
+                       <size>
+                        <width>120</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Get Recordings</string>
+                      </property>
+                     </widget>
                     </widget>
                    </item>
-                   <item>
+                   <item row="1" column="0">
                     <widget class="QSplitter" name="splitter_18">
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
@@ -532,7 +543,7 @@ p, li { white-space: pre-wrap; }
                        <rect>
                         <x>10</x>
                         <y>10</y>
-                        <width>278</width>
+                        <width>367</width>
                         <height>25</height>
                        </rect>
                       </property>
@@ -552,9 +563,14 @@ p, li { white-space: pre-wrap; }
                         </size>
                        </property>
                       </widget>
+                      <widget class="QPushButton" name="get_active_DMP_pushButton">
+                       <property name="text">
+                        <string>get_dmp</string>
+                       </property>
+                      </widget>
                       <widget class="QPushButton" name="set_active_DMP_pushButton">
                        <property name="text">
-                        <string>PushButton</string>
+                        <string>set_dmp</string>
                        </property>
                       </widget>
                      </widget>
