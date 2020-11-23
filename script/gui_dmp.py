@@ -29,7 +29,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        # self.
+        self.ui.simulationCheckBox.stateChanged.connect(self.setSimulation)
         self.ui.stackedWidget.setCurrentIndex(0)
         self.ui.startButton.clicked.connect(self.start_click)
 
@@ -88,8 +88,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.goal_JS = [-2.3324595133410853, -2.2434170881854456, -1.1172669569598597, -1.3543337027179163, 1.5941375494003296, 7.169057373200552]
         # Front page params
         self.robot = 'roslaunch roy_dmp ur3_gazebo_with_dmp.launch'
+        self.robot = 'roslaunch ur_gazebo ur3.launch'
         self.IP = '192.168.2.192'
-        self.sim = False
+        self.sim = True
         self.process = QProcess(self)
 
 
@@ -104,17 +105,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def setSimulation(self,state):
         if state == Qt.Checked:
             self.sim = True
+            print("True")
         else:
             self.sim = False
+            print("False")
 
-    def setSimulation(self):
-        pass
+    # def setSimulation(self):
+        # pass
     def setIPRobot(self,text):
         self.IP = text
     def chooseRobot(self,text):
         if text == 'UR3':
             if self.sim:
-               self.robot = 'roslaunch roy_dmp ur3_gazebo_with_dmp.launch' 
+               self.robot = 'roslaunch ur_gazebo ur3.launch' 
             else:
                 self.robot = 'roslaunch roy_dmp ur3_with_dmp.launch'
         elif text == 'UR5':
@@ -225,6 +228,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         joint_states = get_joints()
         self.initial_JS = [joint_states.position[2],joint_states.position[1],joint_states.position[0],joint_states.position[3],joint_states.position[4],joint_states.position[5]]
         self.ui.set_JointState_init_0_lineEdit.setText(str(self.initial_JS[0]))
+        self.ui.set_JointState_init_1_lineEdit.setText(str(self.initial_JS[1]))
+        self.ui.set_JointState_init_2_lineEdit.setText(str(self.initial_JS[2]))
+        self.ui.set_JointState_init_3_lineEdit.setText(str(self.initial_JS[3]))
+        self.ui.set_JointState_init_4_lineEdit.setText(str(self.initial_JS[4]))
+        self.ui.set_JointState_init_5_lineEdit.setText(str(self.initial_JS[5]))
         print(self.initial_JS[0])
     def getJS_goal_robot(self):
         joint_states = rospy.wait_for_message("/joint_states", JointState)

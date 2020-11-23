@@ -6,14 +6,12 @@ import rosbag
 from os.path import join
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import JointState
-from moveit_msgs.srv import GetPositionIKRequest, GetPositionIKResponse, GetPositionIK
-from moveit_msgs.msg import MoveItErrorCodes, RobotTrajectory
-from actionlib import SimpleActionClient, GoalStatus
-# from play_motion_msgs.msg import PlayMotionAction, PlayMotionGoal, PlayMotionResult
-# from helper_functions import moveit_error_dict, goal_status_dict
-import matplotlib.pyplot as plt
-import time
-import tf
+# from moveit_msgs.srv import GetPositionIKRequest, GetPositionIKResponse, GetPositionIK
+# from moveit_msgs.msg import MoveItErrorCodes, RobotTrajectory
+# from actionlib import SimpleActionClient, GoalStatus
+# import matplotlib.pyplot as plt
+# import time
+# import tf
 
 DEFAULT_IK_SERVICE = "/compute_ik"
 DEFAULT_JOINT_STATES = "/joint_states"
@@ -105,13 +103,15 @@ class RecordFromJointState():
         self.joints_to_record = []
         self.rosbag_file_path = '/home/roy/catkin_ws/src/roy_dmp/data/rosbag_recordings'        
 
-
+        # Callback function for the ros_msgs. If recording == True. It appends the data
     def joint_states_cb(self, data):
         """joint_states topic callback """
         rospy.logdebug("Received joint_states:\n " + str(data))
         if self.start_recording:
             self.joint_states_accumulator.append(data)
 
+        # Calling this function will activate the recording. 
+        # It also gives the name of the outputfile.
     def start_record(self, motion_name, joints=[], bag_name="no_bag_name_set"):
         """ Start the recording of the joint states, and accumulate the msgs """
         self.current_rosbag_name = bag_name
@@ -122,6 +122,8 @@ class RecordFromJointState():
         else:
             rospy.logerr(" No joints are given for recording. ABORTING")
             return
+        
+        # Stops the recording, and saving the appended data to a rosbag file.
     def stop_record(self):
 
         self.start_recording = False

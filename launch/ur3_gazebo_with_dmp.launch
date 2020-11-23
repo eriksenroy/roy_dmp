@@ -4,13 +4,13 @@
 
 
   <include file="$(find timed_roslaunch)/launch/timed_roslaunch.launch">
-    <arg name="time" value="10" />
+    <arg name="time" value="2" />
     <arg name="pkg" value="dmp" />
     <arg name="file" value="dmp.launch" />
   </include>
 
   <include file="$(find timed_roslaunch)/launch/timed_roslaunch.launch">
-    <arg name="time" value="15" />
+    <arg name="time" value="4" />
     <arg name="pkg" value="ur3_moveit_config" />
     <arg name="file" value="ur3_moveit_planning_execution.launch" />
   </include>
