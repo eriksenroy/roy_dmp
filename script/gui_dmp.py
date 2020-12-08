@@ -6,12 +6,14 @@
 import sys
 import os
 import rospy
-import rviz
 from sensor_msgs.msg import JointState
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication, QWidget,QHBoxLayout, QMainWindow, QPushButton, QMessageBox, QBoxLayout,QVBoxLayout
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-
+# from python_qt_binding.QtGui import *
+# from python_qt_binding.QtCore import *
+import rviz
 from ui_dmp import Ui_MainWindow
 sys.path.append("/home/roy/catkin_ws/src/roy_dmp/src")
 from dmp_record import *
@@ -35,8 +37,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.ui.startButton.clicked.connect(self.start_click)
         self.ui.start_loadClasses_PB.clicked.connect(self.load_classes)
-        # self.map_widget = MyViz()
-        # self.ui.gridLayout_6.addWidget(self.map_widget)
+        self.RviZ = RViz()
+        # self.ui.
+        self.ui.gridLayout_6.addWidget(self.RviZ)
+        # self.ui.gridLayout_6.addWidget(self.RviZ)
     
         # Recording buttons connect
         self.ui.rec_EE_radio_button.clicked.connect(self.setRecEE)
@@ -265,11 +269,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         final_pose = [-2.3324595133410853, -2.2434170881854456, -1.1172669569598597, -1.3543337027179163, 1.5941375494003296, 7.169057373200552]
         print("start path plan")
         self.path_plan = self.dmp_mg.getPlan(initial_pose,final_pose,-1,[],None,tau=5,dt=0.008)
-        print(self.path_plan.plan.points)
+        print(self.path_plan.plan.points[0].positions)
         robot_traj = self.dmp_me.robotTrajectoryFromPlan(self.path_plan,self.dmp_me.arm)
         print("checking collisions")
         validity = self.dmp_me.checkTrajectoryValidity(robot_traj)
-        path_pub = self.dmp_me.pathPublish(self.path_plan)
+        self.dmp_me.pathPublish(self.path_plan)
         print("OK")
         print(validity)
         if validity:
@@ -281,30 +285,130 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.execute_collisionCheck_PB.setStyleSheet("background-color: red")
             self.ui.execute_plan_pushButton.setEnabled(False)
         
-# class MyViz():
-#     def __init__(self):
-#         QtWidgets.__init__(self)
-#         self.frame = rviz.VisualizationFrame()
-#         self.frame.setSplashPath( "" )
-#         self.frame.initialize()
-#         reader = rviz.YamlConfigReader()
-#         config = rviz.Config()
+class RViz(QWidget ):
 
-#         #you will need a rviz config file. This config file basically has the information about what all from the rviz you want to display on your custom UI.
-   
-#         reader.readFile( config, "my_rviz_file.rviz" )
-#         self.frame.load( config )
+    ## MyViz Constructor
+    ## ^^^^^^^^^^^^^^^^^
+    ##
+    ## Its constructor creates and configures all the component widgets:
+    ## frame, thickness_slider, top_button, and side_button, and adds them
+    ## to layouts.
+    def __init__(self):
+        QWidget.__init__(self)
 
-#         #some settings for how you want your rviz screen to look like.
-#         self.setWindowTitle( config.mapGetChild( "Title" ).getValue() )
-#         self.frame.setMenuBar( None )
-#         self.frame.setStatusBar( None )
-#         self.frame.setHideButtonVisibility( False )
-#         self.manager = self.frame.getManager()
-#         self.grid_display = self.manager.getRootDisplayGroup().getDisplayAt( 0 )
-#         layout = QVBoxLayout()
-#         layout.addWidget( self.frame )
-#         self.setLayout( layout )
+        ## rviz.VisualizationFrame is the main container widget of the
+        ## regular RViz application, with menus, a toolbar, a status
+        ## bar, and many docked subpanels.  In this example, we
+        ## disable everything so that the only thing visible is the 3D
+        ## render window.
+        self.frame = rviz.VisualizationFrame()
+
+        ## The "splash path" is the full path of an image file which
+        ## gets shown during loading.  Setting it to the empty string
+        ## suppresses that behavior.
+        self.frame.setSplashPath( "" )
+
+        ## VisualizationFrame.initialize() must be called before
+        ## VisualizationFrame.load().  In fact it must be called
+        ## before most interactions with RViz classes because it
+        ## instantiates and initializes the VisualizationManager,
+        ## which is the central class of RViz.
+        self.frame.initialize()
+
+        ## The reader reads config file data into the config object.
+        ## VisualizationFrame reads its data from the config object.
+        reader = rviz.YamlConfigReader()
+        config = rviz.Config()
+        reader.readFile( config, "/home/roy/catkin_ws/src/roy_dmp/resources/dmp_config.rviz" )
+        self.frame.load( config )
+
+        ## You can also store any other application data you like in
+        ## the config object.  Here we read the window title from the
+        ## map key called "Title", which has been added by hand to the
+        ## config file.
+        self.setWindowTitle( config.mapGetChild( "Title" ).getValue() )
+
+        ## Here we disable the menu bar (from the top), status bar
+        ## (from the bottom), and the "hide-docks" buttons, which are
+        ## the tall skinny buttons on the left and right sides of the
+        ## main render window.
+        self.frame.setMenuBar( None )
+        self.frame.setStatusBar( None )
+        self.frame.setHideButtonVisibility( True)
+
+        ## frame.getManager() returns the VisualizationManager
+        ## instance, which is a very central class.  It has pointers
+        ## to other manager objects and is generally required to make
+        ## any changes in an rviz instance.
+        self.manager = self.frame.getManager()
+
+        ## Since the config file is part of the source code for this
+        ## example, we know that the first display in the list is the
+        ## grid we want to control.  Here we just save a reference to
+        ## it for later.
+        self.grid_display = self.manager.getRootDisplayGroup().getDisplayAt( 0 )
+        
+        ## Here we create the layout and other widgets in the usual Qt way.
+        layout = QVBoxLayout()
+        layout.addWidget( self.frame )
+        
+        # thickness_slider = QSlider( Qt.Horizontal )
+        # thickness_slider.setTracking( True )
+        # thickness_slider.setMinimum( 1 )
+        # thickness_slider.setMaximum( 1000 )
+        # thickness_slider.valueChanged.connect( self.onThicknessSliderChanged )
+        # layout.addWidget( thickness_slider )
+        
+        h_layout = QHBoxLayout()
+        
+        top_button = QPushButton( "Top View" )
+        top_button.clicked.connect( self.onTopButtonClick )
+        h_layout.addWidget( top_button )
+        
+        side_button = QPushButton( "Side View" )
+        side_button.clicked.connect( self.onSideButtonClick )
+        h_layout.addWidget( side_button )
+        
+        layout.addLayout( h_layout )
+        
+        self.setLayout( layout )
+
+    ## Handle GUI events
+    ## ^^^^^^^^^^^^^^^^^
+    ##
+    ## After the constructor, for this example the class just needs to
+    ## respond to GUI events.  Here is the slider callback.
+    ## rviz.Display is a subclass of rviz.Property.  Each Property can
+    ## have sub-properties, forming a tree.  To change a Property of a
+    ## Display, use the subProp() function to walk down the tree to
+    ## find the child you need.
+    def onThicknessSliderChanged( self, new_value ):
+        if self.grid_display != None:
+            self.grid_display.subProp( "Line Style" ).subProp( "Line Width" ).setValue( new_value / 1000.0 )
+
+    ## The view buttons just call switchToView() with the name of a saved view.
+    def onTopButtonClick( self ):
+        self.switchToView( "Top View" );
+        
+    def onSideButtonClick( self ):
+        self.switchToView( "Side View" );
+        
+    ## switchToView() works by looping over the views saved in the
+    ## ViewManager and looking for one with a matching name.
+    ##
+    ## view_man.setCurrentFrom() takes the saved view
+    ## instance and copies it to set the current view
+    ## controller.
+    def switchToView( self, view_name ):
+        view_man = self.manager.getViewManager()
+        for i in range( view_man.getNumViews() ):
+            if view_man.getViewAt( i ).getName() == view_name:
+                view_man.setCurrentFrom( view_man.getViewAt( i ))
+                return
+        print( "Did not find view named %s." % view_name )
+
+## Start the Application
+        
 
 
 def main():
@@ -312,6 +416,9 @@ def main():
     app = QtWidgets.QApplication(sys.argv)
     application = ApplicationWindow()
     application.show()
+    # rviz = RViz()
+    # # rviz.resize( 500, 500 )
+    # rviz.show()
     sys.exit(app.exec_())
 
 if __name__ == "__main__":

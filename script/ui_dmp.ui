@@ -744,9 +744,12 @@ p, li { white-space: pre-wrap; }
                      </property>
                      <layout class="QGridLayout" name="gridLayout_6">
                       <item row="0" column="0">
-                       <widget class="QPlainTextEdit" name="plainTextEdit">
-                        <property name="autoFillBackground">
-                         <bool>true</bool>
+                       <widget class="QWidget" name="space_for_rviz" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>400</width>
+                          <height>0</height>
+                         </size>
                         </property>
                        </widget>
                       </item>
@@ -771,40 +774,56 @@ p, li { white-space: pre-wrap; }
                          <property name="frameShadow">
                           <enum>QFrame::Raised</enum>
                          </property>
-                         <layout class="QGridLayout" name="gridLayout_25">
-                          <item row="1" column="0">
-                           <widget class="QLineEdit" name="set_JointState_init_0_lineEdit">
-                            <property name="placeholderText">
-                             <string>(-pi, pi)</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="3" column="0">
-                           <widget class="QLineEdit" name="set_JointState_init_2_lineEdit"/>
-                          </item>
-                          <item row="6" column="0">
-                           <widget class="QLineEdit" name="set_JointState_init_5_lineEdit"/>
-                          </item>
-                          <item row="2" column="0">
-                           <widget class="QLineEdit" name="set_JointState_init_1_lineEdit"/>
-                          </item>
-                          <item row="4" column="0">
-                           <widget class="QLineEdit" name="set_JointState_init_3_lineEdit"/>
-                          </item>
-                          <item row="7" column="0">
-                           <widget class="QPushButton" name="get_JS_init_robot_pushButton">
-                            <property name="text">
-                             <string>Retrieve from Robot</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="5" column="0">
-                           <widget class="QLineEdit" name="set_JointState_init_4_lineEdit"/>
-                          </item>
-                          <item row="0" column="0">
+                         <layout class="QVBoxLayout" name="verticalLayout_7">
+                          <item>
                            <widget class="QLabel" name="label_25">
                             <property name="text">
                              <string>Initial position</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QSplitter" name="splitter_11">
+                            <property name="orientation">
+                             <enum>Qt::Horizontal</enum>
+                            </property>
+                            <widget class="QLabel" name="label_6">
+                             <property name="text">
+                              <string>shoulder_pan_joint</string>
+                             </property>
+                            </widget>
+                            <widget class="QLineEdit" name="set_JointState_init_0_lineEdit">
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>40</height>
+                              </size>
+                             </property>
+                             <property name="placeholderText">
+                              <string>(-pi, pi)</string>
+                             </property>
+                            </widget>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="set_JointState_init_1_lineEdit"/>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="set_JointState_init_2_lineEdit"/>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="set_JointState_init_3_lineEdit"/>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="set_JointState_init_4_lineEdit"/>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="set_JointState_init_5_lineEdit"/>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="get_JS_init_robot_pushButton">
+                            <property name="text">
+                             <string>Retrieve from Robot</string>
                             </property>
                            </widget>
                           </item>
