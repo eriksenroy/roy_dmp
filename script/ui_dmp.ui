@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>925</width>
-    <height>645</height>
+    <width>1039</width>
+    <height>861</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,6 +39,12 @@
           <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="0">
             <widget class="QTextEdit" name="textEdit">
+             <property name="font">
+              <font>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
              <property name="readOnly">
               <bool>true</bool>
              </property>
@@ -71,8 +77,8 @@ p, li { white-space: pre-wrap; }
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <layout class="QGridLayout" name="gridLayout_5">
-           <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
             <widget class="QFrame" name="frame_2">
              <property name="minimumSize">
               <size>
@@ -93,6 +99,12 @@ p, li { white-space: pre-wrap; }
                  <enum>Qt::Horizontal</enum>
                 </property>
                 <widget class="QLabel" name="RobotIPLabel">
+                 <property name="maximumSize">
+                  <size>
+                   <width>150</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                  <property name="text">
                   <string>Robot IP:</string>
                  </property>
@@ -131,7 +143,42 @@ p, li { white-space: pre-wrap; }
              </layout>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item>
+            <widget class="QSplitter" name="splitter_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <widget class="QLabel" name="label">
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>150</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Robots:</string>
+              </property>
+             </widget>
+             <widget class="QComboBox" name="ChooseRobotcomboBox">
+              <item>
+               <property name="text">
+                <string>UR3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>UR5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>UR10</string>
+               </property>
+              </item>
+             </widget>
+            </widget>
+           </item>
+           <item>
             <widget class="QFrame" name="frame">
              <property name="minimumSize">
               <size>
@@ -151,41 +198,41 @@ p, li { white-space: pre-wrap; }
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
-                  <height>70</height>
+                  <height>40</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>Start</string>
+                 <string>Connect to Robot</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="start_loadClasses_PB">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Start DMP application</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="shutDownButton">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>40</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>Shutdown</string>
                 </property>
                </widget>
               </item>
              </layout>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QComboBox" name="ChooseRobotcomboBox">
-             <item>
-              <property name="text">
-               <string>UR3</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>UR5</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>UR10</string>
-              </property>
-             </item>
             </widget>
            </item>
           </layout>
@@ -214,14 +261,147 @@ p, li { white-space: pre-wrap; }
                <enum>QTabWidget::Rounded</enum>
               </property>
               <property name="currentIndex">
-               <number>2</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="Recording_tab">
                <attribute name="title">
                 <string>Recording</string>
                </attribute>
-               <layout class="QGridLayout" name="gridLayout_19">
-                <item row="2" column="1" colspan="4">
+               <layout class="QVBoxLayout" name="verticalLayout_3">
+                <item>
+                 <widget class="QFrame" name="frame_23">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_5">
+                   <item row="0" column="0">
+                    <widget class="QSplitter" name="splitter_8">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <widget class="QRadioButton" name="rec_EE_radio_button">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>End-Effector</string>
+                      </property>
+                     </widget>
+                     <widget class="QLabel" name="label_2">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <italic>true</italic>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>World position of the tool point</string>
+                      </property>
+                     </widget>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QSplitter" name="splitter_9">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <widget class="QRadioButton" name="rec_JS_radio_button">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Joint_States</string>
+                      </property>
+                     </widget>
+                     <widget class="QLabel" name="label_3">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>TextLabel</string>
+                      </property>
+                     </widget>
+                    </widget>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QSplitter" name="splitter_10">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <widget class="QRadioButton" name="rec_JS_Filter_radio_button">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Joint_States with filtering</string>
+                      </property>
+                     </widget>
+                     <widget class="QLabel" name="label_4">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>TextLabel</string>
+                      </property>
+                     </widget>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSplitter" name="splitter_7">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <widget class="QLabel" name="label_15">
+                   <property name="maximumSize">
+                    <size>
+                     <width>150</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>Name of recording:</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="name_recording_line_edit">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>25</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QFrame" name="frame_22">
                   <property name="frameShape">
                    <enum>QFrame::StyledPanel</enum>
@@ -229,13 +409,13 @@ p, li { white-space: pre-wrap; }
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
                   </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_11">
+                  <layout class="QVBoxLayout" name="verticalLayout_4">
                    <item>
                     <widget class="QPushButton" name="start_recording_button">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
-                       <height>50</height>
+                       <height>40</height>
                       </size>
                      </property>
                      <property name="text">
@@ -248,7 +428,7 @@ p, li { white-space: pre-wrap; }
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
-                       <height>50</height>
+                       <height>40</height>
                       </size>
                      </property>
                      <property name="text">
@@ -259,67 +439,14 @@ p, li { white-space: pre-wrap; }
                   </layout>
                  </widget>
                 </item>
-                <item row="0" column="2">
-                 <widget class="QFrame" name="frame_23">
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_12">
-                   <item>
-                    <widget class="QRadioButton" name="rec_EE_radio_button">
-                     <property name="text">
-                      <string>End-Effector</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QRadioButton" name="rec_JS_radio_button">
-                     <property name="text">
-                      <string>Joint_States</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QRadioButton" name="rec_JS_Filter_radio_button">
-                     <property name="text">
-                      <string>Joint_States with filtering</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QLabel" name="label_15">
-                  <property name="text">
-                   <string>Name:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QLineEdit" name="name_recording_line_edit">
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>25</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
               <widget class="QWidget" name="Generate_tab">
                <attribute name="title">
                 <string>Learning</string>
                </attribute>
-               <layout class="QGridLayout" name="gridLayout_20">
-                <item row="0" column="0">
+               <layout class="QVBoxLayout" name="verticalLayout_6">
+                <item>
                  <widget class="QFrame" name="frame_26">
                   <property name="frameShape">
                    <enum>QFrame::StyledPanel</enum>
@@ -330,6 +457,12 @@ p, li { white-space: pre-wrap; }
                   <layout class="QVBoxLayout" name="verticalLayout_15">
                    <item>
                     <widget class="QLabel" name="label_22">
+                     <property name="font">
+                      <font>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
                      <property name="text">
                       <string>Type of recording to load</string>
                      </property>
@@ -337,6 +470,9 @@ p, li { white-space: pre-wrap; }
                    </item>
                    <item>
                     <widget class="QRadioButton" name="load_EE_rec_radio_button">
+                     <property name="toolTip">
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;world position of the tool point&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                     </property>
                      <property name="text">
                       <string>End-Effector rec</string>
                      </property>
@@ -352,7 +488,7 @@ p, li { white-space: pre-wrap; }
                   </layout>
                  </widget>
                 </item>
-                <item row="1" column="0">
+                <item>
                  <widget class="QFrame" name="frame_24">
                   <property name="frameShape">
                    <enum>QFrame::StyledPanel</enum>
@@ -360,7 +496,20 @@ p, li { white-space: pre-wrap; }
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
                   </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_13">
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <widget class="QLabel" name="label_5">
+                     <property name="font">
+                      <font>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>DMP parameters</string>
+                     </property>
+                    </widget>
+                   </item>
                    <item>
                     <widget class="QSplitter" name="splitter_13">
                      <property name="orientation">
@@ -432,7 +581,7 @@ p, li { white-space: pre-wrap; }
                   </layout>
                  </widget>
                 </item>
-                <item row="2" column="0">
+                <item>
                  <widget class="QFrame" name="frame_25">
                   <property name="frameShape">
                    <enum>QFrame::StyledPanel</enum>
@@ -480,8 +629,11 @@ p, li { white-space: pre-wrap; }
                       </property>
                      </widget>
                      <widget class="QLineEdit" name="save_name_dmp_lineedit">
+                      <property name="text">
+                       <string/>
+                      </property>
                       <property name="placeholderText">
-                       <string>ex: recording_start_goal_with</string>
+                       <string>Default: Same name as recording unless specified</string>
                       </property>
                      </widget>
                     </widget>
@@ -489,7 +641,7 @@ p, li { white-space: pre-wrap; }
                   </layout>
                  </widget>
                 </item>
-                <item row="3" column="0">
+                <item>
                  <widget class="QFrame" name="frame_27">
                   <property name="frameShape">
                    <enum>QFrame::StyledPanel</enum>
@@ -569,8 +721,14 @@ p, li { white-space: pre-wrap; }
                        </property>
                       </widget>
                       <widget class="QPushButton" name="set_active_DMP_pushButton">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
                        <property name="text">
-                        <string>set_dmp</string>
+                        <string>set_active_dmp</string>
                        </property>
                       </widget>
                      </widget>
@@ -820,10 +978,17 @@ p, li { white-space: pre-wrap; }
                          <enum>QFrame::Raised</enum>
                         </property>
                         <layout class="QGridLayout" name="gridLayout_30">
-                         <item row="0" column="0">
+                         <item row="1" column="0">
                           <widget class="QPushButton" name="execute_plan_pushButton">
                            <property name="text">
                             <string>EXECUTE PLAN</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0">
+                          <widget class="QPushButton" name="execute_collisionCheck_PB">
+                           <property name="text">
+                            <string>Check collisions</string>
                            </property>
                           </widget>
                          </item>
@@ -904,7 +1069,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>925</width>
+     <width>1039</width>
      <height>22</height>
     </rect>
    </property>
@@ -912,6 +1077,7 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionHome"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -922,6 +1088,11 @@ p, li { white-space: pre-wrap; }
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionHome">
+   <property name="text">
+    <string>Home</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

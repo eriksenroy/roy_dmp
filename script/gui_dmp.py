@@ -6,10 +6,12 @@
 import sys
 import os
 import rospy
+import rviz
 from sensor_msgs.msg import JointState
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+
 from ui_dmp import Ui_MainWindow
 sys.path.append("/home/roy/catkin_ws/src/roy_dmp/src")
 from dmp_record import *
@@ -32,8 +34,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.simulationCheckBox.stateChanged.connect(self.setSimulation)
         self.ui.stackedWidget.setCurrentIndex(0)
         self.ui.startButton.clicked.connect(self.start_click)
-
-
+        self.ui.start_loadClasses_PB.clicked.connect(self.load_classes)
+        # self.map_widget = MyViz()
+        # self.ui.gridLayout_6.addWidget(self.map_widget)
     
         # Recording buttons connect
         self.ui.rec_EE_radio_button.clicked.connect(self.setRecEE)
@@ -58,14 +61,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.set_active_DMP_pushButton.clicked.connect(self.sendActiveDMP)
         self.ui.set_DMP_comboBox.currentIndexChanged.connect(self.setActiveDMP)
         self.ui.get_JS_init_robot_pushButton.clicked.connect(self.getJS_init_robot)
+        self.ui.execute_collisionCheck_PB.clicked.connect(self.collision_check)
+        self.ui.execute_plan_pushButton.clicked.connect(self.execute_plan)
+
+        self.ui.execute_plan_pushButton.setEnabled(False)
         #Robot variables
         self.arm = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',
                'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
        
        #Initialize DMP classes from ROS
-        self.dmp_record_JS = RecordFromJointState()
-        self.dmp_mg = motionGeneration()
-        # self.dmp_me = motionExecution()
+        self.dmp_record_JS =[]
+        self.dmp_mg = []
+        self.dmp_me = []
 
 
 
@@ -86,9 +93,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.active_DMP = "No_name"
         self.initial_JS = [-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034,  1.5502419471740723, 9.261386219655172]
         self.goal_JS = [-2.3324595133410853, -2.2434170881854456, -1.1172669569598597, -1.3543337027179163, 1.5941375494003296, 7.169057373200552]
+        self.path_plan = []
         # Front page params
         self.robot = 'roslaunch roy_dmp ur3_gazebo_with_dmp.launch'
-        self.robot = 'roslaunch ur_gazebo ur3.launch'
+        # self.robot = 'roslaunch ur_gazebo ur3.launch'
         self.IP = '192.168.2.192'
         self.sim = True
         self.process = QProcess(self)
@@ -117,9 +125,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def chooseRobot(self,text):
         if text == 'UR3':
             if self.sim:
-               self.robot = 'roslaunch ur_gazebo ur3.launch' 
+               self.robot = 'roslaunch roy_dmp ur3_gazebo_with_dmp.launch' 
             else:
-                self.robot = 'roslaunch roy_dmp ur3_with_dmp.launch'
+                self.robot = 'roslaunch ur_gazebo ur3.launch'
         elif text == 'UR5':
             if self.sim:
                 self.robot = 'roslaunch ur_gazebo ur5.launch'
@@ -138,7 +146,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             pass
 
     def start_click(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
         program = self.robot
         self.process.start(program)
         print("Finished")
@@ -169,7 +176,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def loadEERec(self):
         self.dmp_load_type = 0
     def loadJSRec(self):
-        # self.dmp_mg.loadMotionFromJointStates(self.dmp_record_name_load,self.arm)
+        self.dmp_mg.loadMotionFromJointStates(self.dmp_record_name_load,self.arm)
         self.dmp_load_type = 1
 
     def setdt(self,text):
@@ -194,6 +201,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 print(file_name)
                 self.ui.set_DMP_comboBox.addItem(str(file_name))      
     def setActiveDMP(self):
+        self.ui.execute_collisionCheck_PB.setStyleSheet("background-color: gray")
         self.active_DMP = self.ui.set_DMP_comboBox.currentText()
     def sendActiveDMP(self):
         self.dmp_mg.loadMotionYAML(self.active_DMP)
@@ -225,6 +233,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         print("waiting for message")
         # joint_states = rospy.wait_for_message("/joint_states", JointState)
         # print(joint_states)
+        
         joint_states = get_joints()
         self.initial_JS = [joint_states.position[2],joint_states.position[1],joint_states.position[0],joint_states.position[3],joint_states.position[4],joint_states.position[5]]
         self.ui.set_JointState_init_0_lineEdit.setText(str(self.initial_JS[0]))
@@ -241,10 +250,61 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         pass
     def getDMP_plan(self):
         pass
-    def executeDMP_plan(self):
-        pass
+    def load_classes(self):
+        self.dmp_record_JS = RecordFromJointState()
+        self.dmp_mg = motionGeneration()
+        self.dmp_me = motionExecution()
+        self.ui.stackedWidget.setCurrentIndex(1)
 
+    def execute_plan(self):
+        st = self.dmp_me.sendTrajectoryAction(self.path_plan,self.initial_JS)
+        print(st)
+    def collision_check(self):
+        
+        initial_pose =[-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034,  1.5502419471740723, 9.261386219655172]
+        final_pose = [-2.3324595133410853, -2.2434170881854456, -1.1172669569598597, -1.3543337027179163, 1.5941375494003296, 7.169057373200552]
+        print("start path plan")
+        self.path_plan = self.dmp_mg.getPlan(initial_pose,final_pose,-1,[],None,tau=5,dt=0.008)
+        print(self.path_plan.plan.points)
+        robot_traj = self.dmp_me.robotTrajectoryFromPlan(self.path_plan,self.dmp_me.arm)
+        print("checking collisions")
+        validity = self.dmp_me.checkTrajectoryValidity(robot_traj)
+        path_pub = self.dmp_me.pathPublish(self.path_plan)
+        print("OK")
+        print(validity)
+        if validity:
+            print("OK")
+            self.ui.execute_collisionCheck_PB.setStyleSheet("background-color: green")
+            self.ui.execute_plan_pushButton.setEnabled(True)
+        else:
+            print("not ok")
+            self.ui.execute_collisionCheck_PB.setStyleSheet("background-color: red")
+            self.ui.execute_plan_pushButton.setEnabled(False)
+        
+# class MyViz():
+#     def __init__(self):
+#         QtWidgets.__init__(self)
+#         self.frame = rviz.VisualizationFrame()
+#         self.frame.setSplashPath( "" )
+#         self.frame.initialize()
+#         reader = rviz.YamlConfigReader()
+#         config = rviz.Config()
 
+#         #you will need a rviz config file. This config file basically has the information about what all from the rviz you want to display on your custom UI.
+   
+#         reader.readFile( config, "my_rviz_file.rviz" )
+#         self.frame.load( config )
+
+#         #some settings for how you want your rviz screen to look like.
+#         self.setWindowTitle( config.mapGetChild( "Title" ).getValue() )
+#         self.frame.setMenuBar( None )
+#         self.frame.setStatusBar( None )
+#         self.frame.setHideButtonVisibility( False )
+#         self.manager = self.frame.getManager()
+#         self.grid_display = self.manager.getRootDisplayGroup().getDisplayAt( 0 )
+#         layout = QVBoxLayout()
+#         layout.addWidget( self.frame )
+#         self.setLayout( layout )
 
 
 def main():

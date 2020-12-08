@@ -18,6 +18,7 @@ import copy
 from tf.transformations import *
 from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryGoal
 from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
+from nav_msgs.msg import Path
 import tf
 import sys
 from dmp_learn import motionGeneration
@@ -56,6 +57,7 @@ class motionExecution():
         self.robot_state_collision_pub = rospy.Publisher('/robot_collision_state', DisplayRobotState,queue_size=1)
         rospy.sleep(0.1) # Give time to the publisher to register
         #TODO: make ik_service_name a param to load from a yaml
+        self.imitated_path_pub = rospy.Publisher("/imitated_path", Path, queue_size=1)
         self.ik_service_name = DEFAULT_IK_SERVICE
         # Get a ServiceProxy for the IK service
         rospy.loginfo("Waiting for service '" + self.ik_service_name + "'...")
@@ -435,6 +437,21 @@ class motionExecution():
             print("Fault")
             raise
         return True
+
+    
+
+
+    def pathPublish(self,path):
+        imitated_path = Path()
+        imitated_path.header.frame_id = "/base_link"
+        for itr in range(path.shape[0]):
+            pose_stamped = PoseStamped()
+            pose_stamped.position.x = path[itr,0]
+            pose_stamped.position.y = path[itr,1]
+            pose_stamped.position.z = path[itr,2]
+            imitated_path.poses.append(pose_stamped)
+        self.imitated_path_pub.publish(imitated_path)
+
 
 if __name__ == "__main__":
 
