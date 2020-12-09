@@ -38,9 +38,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.startButton.clicked.connect(self.start_click)
         self.ui.start_loadClasses_PB.clicked.connect(self.load_classes)
         self.RviZ = RViz()
-        # self.ui.
         self.ui.gridLayout_6.addWidget(self.RviZ)
-        # self.ui.gridLayout_6.addWidget(self.RviZ)
+
     
         # Recording buttons connect
         self.ui.rec_EE_radio_button.clicked.connect(self.setRecEE)
@@ -52,9 +51,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Learning buttons connect
         self.ui.load_EE_rec_radio_button.clicked.connect(self.loadEERec)
         self.ui.load_JS_rec_radio_button.clicked.connect(self.loadJSRec)
+        # self.ui.dmp_dt_param_lineedit.setValidator(QDoubleValidator(0.0,99,5))
         self.ui.dmp_dt_param_lineedit.textChanged[str].connect(self.setdt)
+        self.ui.dmp_K_param_lineedit.setValidator(QIntValidator(0,1000))
         self.ui.dmp_K_param_lineedit.textChanged[str].connect(self.setK)
+        self.ui.dmp_D_param_lineedit.setValidator(QIntValidator(0,1000))
         self.ui.dmp_D_param_lineedit.textChanged[str].connect(self.setD)
+        self.ui.dmp_basisfunc_param_lineedit.setValidator(QIntValidator(0,9999))
         self.ui.dmp_basisfunc_param_lineedit.textChanged[str].connect(self.setBasisfunc)
         self.ui.Get_recordings_pushButton.clicked.connect(self.browse_folder)
         self.ui.load_name_rec_comboBox.currentIndexChanged.connect(self.loadNamerec)
@@ -67,6 +70,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.get_JS_init_robot_pushButton.clicked.connect(self.getJS_init_robot)
         self.ui.execute_collisionCheck_PB.clicked.connect(self.collision_check)
         self.ui.execute_plan_pushButton.clicked.connect(self.execute_plan)
+
+        #line edit connections
+        self.ui.set_JointState_init_0_lineEdit.textChanged[str].connect(self.setJS_init_0)
+        self.ui.set_JointState_init_1_lineEdit.textChanged[str].connect(self.setJS_init_1)
+        self.ui.set_JointState_init_2_lineEdit.textChanged[str].connect(self.setJS_init_2)
+        self.ui.set_JointState_init_3_lineEdit.textChanged[str].connect(self.setJS_init_3)
+        self.ui.set_JointState_init_4_lineEdit.textChanged[str].connect(self.setJS_init_4)
+        self.ui.set_JointState_init_5_lineEdit.textChanged[str].connect(self.setJS_init_5)
 
         self.ui.execute_plan_pushButton.setEnabled(False)
         #Robot variables
@@ -122,8 +133,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.sim = False
             print("False")
 
-    # def setSimulation(self):
-        # pass
     def setIPRobot(self,text):
         self.IP = text
     def chooseRobot(self,text):
@@ -184,13 +193,25 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.dmp_load_type = 1
 
     def setdt(self,text):
-        self.dmp_param_dt = float(text)
+        try:
+            self.dmp_param_dt = float(text)
+        except:
+            print("Wrong Type")
     def setK(self,text):
-        self.dmp_param_K = float(text)
+        try:
+            self.dmp_param_K = float(text)
+        except:
+            print("Wrong Type")
     def setD(self,text):
-        self.dmp_param_D = float(text)
+        try:
+            self.dmp_param_D = float(text)
+        except:
+            print("Wrong Type")
     def setBasisfunc(self,text):
-        self.dmp_param_basisfunc = int(text)
+        try:
+            self.dmp_param_basisfunc = int(text)
+        except:
+            print("Wrong Type")
     def loadNamerec(self):
         self.dmp_record_name_load = self.ui.load_name_rec_comboBox.currentText()
     def saveWeights(self,text):
@@ -210,29 +231,65 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def sendActiveDMP(self):
         self.dmp_mg.loadMotionYAML(self.active_DMP)
     def setJS_init_0(self,text):
-        self.initial_JS[0] = float(text)
+        try:
+            self.initial_JS[0] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_init_1(self,text):
-        self.initial_JS[1] = float(text)
+        try:
+            self.initial_JS[1] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_init_2(self,text):
-        self.initial_JS[2] = float(text)
+        try:
+            self.initial_JS[2] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_init_3(self,text):
-        self.initial_JS[3] = float(text)
+        try:
+            self.initial_JS[3] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_init_4(self,text):
-        self.initial_JS[4] = float(text)
+        try:
+            self.initial_JS[4] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_init_5(self,text):
-        self.initial_JS[5] = float(text)
+        try:
+            self.initial_JS[5] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_goal_0(self,text):
-        self.goal_JS[0] = float(text)
+        try:
+            self.goal_JS[0] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_goal_1(self,text):
-        self.goal_JS[1] = float(text)
+        try:
+            self.goal_JS[1] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_goal_2(self,text):
-        self.goal_JS[2] = float(text)
+        try:
+            self.goal_JS[2] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_goal_3(self,text):
-        self.goal_JS[3] = float(text)
+        try:
+            self.goal_JS[3] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_goal_4(self,text):
-        self.goal_JS[4] = float(text)
+        try:
+            self.goal_JS[4] = float(text)
+        except:
+            print("Wrong Type")
     def setJS_goal_5(self,text):
-        self.goal_JS[5] = float(text)
+        try:
+            self.goal_JS[5] = float(text)
+        except:
+            print("Wrong Type")
     def getJS_init_robot(self):
         print("waiting for message")
         # joint_states = rospy.wait_for_message("/joint_states", JointState)
@@ -250,6 +307,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def getJS_goal_robot(self):
         joint_states = rospy.wait_for_message("/joint_states", JointState)
         self.goal_JS = [joint_states.position[2],joint_states.position[1],joint_states.position[0],joint_states.position[3],joint_states.position[4],joint_states.position[5]]
+        self.ui.set_JointState_goal_0_lineEdit.setText(str(self.goal_JS[0]))
+        self.ui.set_JointState_goal_1_lineEdit.setText(str(self.goal_JS[1]))
+        self.ui.set_JointState_goal_2_lineEdit.setText(str(self.goal_JS[2]))
+        self.ui.set_JointState_goal_3_lineEdit.setText(str(self.goal_JS[3]))
+        self.ui.set_JointState_goal_4_lineEdit.setText(str(self.goal_JS[4]))
+        self.ui.set_JointState_goal_5_lineEdit.setText(str(self.goal_JS[5]))
     def setTau(self):
         pass
     def getDMP_plan(self):
@@ -265,8 +328,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         print(st)
     def collision_check(self):
         
-        initial_pose =[-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.3976243177997034,  1.5502419471740723, 9.261386219655172]
-        final_pose = [-2.3324595133410853, -2.2434170881854456, -1.1172669569598597, -1.3543337027179163, 1.5941375494003296, 7.169057373200552]
+        initial_pose = self.initial_JS
+        final_pose = self.goal_JS
         print("start path plan")
         self.path_plan = self.dmp_mg.getPlan(initial_pose,final_pose,-1,[],None,tau=5,dt=0.008)
         print(self.path_plan.plan.points[0].positions)
@@ -287,127 +350,27 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
 class RViz(QWidget ):
 
-    ## MyViz Constructor
-    ## ^^^^^^^^^^^^^^^^^
-    ##
-    ## Its constructor creates and configures all the component widgets:
-    ## frame, thickness_slider, top_button, and side_button, and adds them
-    ## to layouts.
     def __init__(self):
         QWidget.__init__(self)
-
-        ## rviz.VisualizationFrame is the main container widget of the
-        ## regular RViz application, with menus, a toolbar, a status
-        ## bar, and many docked subpanels.  In this example, we
-        ## disable everything so that the only thing visible is the 3D
-        ## render window.
         self.frame = rviz.VisualizationFrame()
-
-        ## The "splash path" is the full path of an image file which
-        ## gets shown during loading.  Setting it to the empty string
-        ## suppresses that behavior.
         self.frame.setSplashPath( "" )
-
-        ## VisualizationFrame.initialize() must be called before
-        ## VisualizationFrame.load().  In fact it must be called
-        ## before most interactions with RViz classes because it
-        ## instantiates and initializes the VisualizationManager,
-        ## which is the central class of RViz.
         self.frame.initialize()
-
-        ## The reader reads config file data into the config object.
-        ## VisualizationFrame reads its data from the config object.
         reader = rviz.YamlConfigReader()
         config = rviz.Config()
         reader.readFile( config, "/home/roy/catkin_ws/src/roy_dmp/resources/dmp_config.rviz" )
         self.frame.load( config )
-
-        ## You can also store any other application data you like in
-        ## the config object.  Here we read the window title from the
-        ## map key called "Title", which has been added by hand to the
-        ## config file.
         self.setWindowTitle( config.mapGetChild( "Title" ).getValue() )
-
-        ## Here we disable the menu bar (from the top), status bar
-        ## (from the bottom), and the "hide-docks" buttons, which are
-        ## the tall skinny buttons on the left and right sides of the
-        ## main render window.
         self.frame.setMenuBar( None )
         self.frame.setStatusBar( None )
         self.frame.setHideButtonVisibility( True)
-
-        ## frame.getManager() returns the VisualizationManager
-        ## instance, which is a very central class.  It has pointers
-        ## to other manager objects and is generally required to make
-        ## any changes in an rviz instance.
         self.manager = self.frame.getManager()
-
-        ## Since the config file is part of the source code for this
-        ## example, we know that the first display in the list is the
-        ## grid we want to control.  Here we just save a reference to
-        ## it for later.
         self.grid_display = self.manager.getRootDisplayGroup().getDisplayAt( 0 )
-        
-        ## Here we create the layout and other widgets in the usual Qt way.
         layout = QVBoxLayout()
         layout.addWidget( self.frame )
-        
-        # thickness_slider = QSlider( Qt.Horizontal )
-        # thickness_slider.setTracking( True )
-        # thickness_slider.setMinimum( 1 )
-        # thickness_slider.setMaximum( 1000 )
-        # thickness_slider.valueChanged.connect( self.onThicknessSliderChanged )
-        # layout.addWidget( thickness_slider )
-        
         h_layout = QHBoxLayout()
-        
-        top_button = QPushButton( "Top View" )
-        top_button.clicked.connect( self.onTopButtonClick )
-        h_layout.addWidget( top_button )
-        
-        side_button = QPushButton( "Side View" )
-        side_button.clicked.connect( self.onSideButtonClick )
-        h_layout.addWidget( side_button )
-        
         layout.addLayout( h_layout )
-        
         self.setLayout( layout )
 
-    ## Handle GUI events
-    ## ^^^^^^^^^^^^^^^^^
-    ##
-    ## After the constructor, for this example the class just needs to
-    ## respond to GUI events.  Here is the slider callback.
-    ## rviz.Display is a subclass of rviz.Property.  Each Property can
-    ## have sub-properties, forming a tree.  To change a Property of a
-    ## Display, use the subProp() function to walk down the tree to
-    ## find the child you need.
-    def onThicknessSliderChanged( self, new_value ):
-        if self.grid_display != None:
-            self.grid_display.subProp( "Line Style" ).subProp( "Line Width" ).setValue( new_value / 1000.0 )
-
-    ## The view buttons just call switchToView() with the name of a saved view.
-    def onTopButtonClick( self ):
-        self.switchToView( "Top View" );
-        
-    def onSideButtonClick( self ):
-        self.switchToView( "Side View" );
-        
-    ## switchToView() works by looping over the views saved in the
-    ## ViewManager and looking for one with a matching name.
-    ##
-    ## view_man.setCurrentFrom() takes the saved view
-    ## instance and copies it to set the current view
-    ## controller.
-    def switchToView( self, view_name ):
-        view_man = self.manager.getViewManager()
-        for i in range( view_man.getNumViews() ):
-            if view_man.getViewAt( i ).getName() == view_name:
-                view_man.setCurrentFrom( view_man.getViewAt( i ))
-                return
-        print( "Did not find view named %s." % view_name )
-
-## Start the Application
         
 
 
