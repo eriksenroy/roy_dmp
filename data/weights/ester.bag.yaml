@@ -902,4 +902,4 @@ initial_pose: [0.00023317899981734058, 0.005522910211274379, 0.00080748681123754
   0.0015206397868539057, -6.94210068878931e-05, 0.0005036212141495966]
 joints: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint,
   wrist_3_joint]
-name: !!python/unicode 'ester1.bag'
+name: !!python/unicode 'ester.bag'

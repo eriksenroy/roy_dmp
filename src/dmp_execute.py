@@ -56,6 +56,7 @@ class motionExecution():
         rospy.loginfo("Connected.")
         self.sv = StateValidity()
         self.fk = ForwardKinematics()
+        self.ik = InverseKinematics()
         self.robot_state_collision_pub = rospy.Publisher('/robot_collision_state', DisplayRobotState,queue_size=1)
         rospy.sleep(0.1) # Give time to the publisher to register
         #TODO: make ik_service_name a param to load from a yaml
@@ -440,27 +441,36 @@ class motionExecution():
             raise
         return True
 
-    def fkPath(self,_position):
-        fk_link_names = "rg2_eef_link"
+    def fkPath(self,_position,_linkName):
+        fk_link_names = _linkName
         joint_names = self.arm
         position = _position
         fk_result = self.fk.getFK(fk_link_names,joint_names,position)
-        print("test av FK")
-        print(fk_result.pose_stamped[0].pose.position)
-        return fk_result.pose_stamped[0].pose.position
+        # print("test av FK")
+        # print(fk_result.pose_stamped[0].pose.position)
+        return fk_result.pose_stamped[0].pose
+
+    def get_IK_from_Quart(self,_ps):
+        ik_link_name = "rg2_eef_link"
+        group_name = "manipulator"
+        ps = PoseStamped()
+        ps.header.frame_id ="base_link"
+        ps.pose = _ps
+        ik_result = self.ik.getIK(group_name,ik_link_name,ps)
+        return ik_result
 
 
-    def pathPublish(self,_path):
+    def pathPublish(self,_path,_linkName):
         imitated_path = Path()
         imitated_path.header.frame_id = "/base_link"
 
         for itr in range(len(_path.plan.points)):
             joint_positions = _path.plan.points[itr].positions
-            path = self.fkPath(joint_positions)
+            path = self.fkPath(joint_positions,_linkName)
             pose_stamped = PoseStamped()
-            pose_stamped.pose.position.x = path.x
-            pose_stamped.pose.position.y = path.y
-            pose_stamped.pose.position.z = path.z
+            pose_stamped.pose.position.x = path.position.x
+            pose_stamped.pose.position.y = path.position.y
+            pose_stamped.pose.position.z = path.position.z
             imitated_path.poses.append(pose_stamped)
         self.imitated_path_pub.publish(imitated_path)
 

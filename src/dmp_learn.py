@@ -54,7 +54,7 @@ class motionGeneration():
         """Load motion from the bag name given """
         pass
 
-    def loadMotionFromJointStates(self, bagname, joints):
+    def loadMotionFromJointStates(self, bagname, joints,_dt=000.8,_K=100,_D=2.0 * np.sqrt(100),_num_bases=None):
         """Load motion from the bag name given """
         # Get bag info
         file = join(self.rosbag_file_path,bagname)
@@ -63,10 +63,13 @@ class motionGeneration():
 
         # Create a DMP from the number of joints in the trajectory
         dims = len(joints)
-        dt = 0.008
-        K = 100
-        D = 2.0 * np.sqrt(K)
-        num_bases = bases_rel_to_time
+        dt = _dt
+        K = _K
+        D = _D
+        # if _num_bases==None:
+        #     num_bases = bases_rel_to_time
+        # else:
+        num_bases = _num_bases
 
         traj = []
         bag = rosbag.Bag(file)

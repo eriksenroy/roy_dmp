@@ -2096,4 +2096,4 @@ initial_pose: [-0.2273033300982874, -2.298889462147848, -1.0177272001849573, -1.
   1.5502419471740723, 9.261386219655172]
 joints: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint,
   wrist_3_joint]
-name: recording_start1.bag
+name: !!python/unicode 'recording_start1.bag'
