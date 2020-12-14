@@ -48,6 +48,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.Tab.currentChanged.connect(self.browse_recordings)
         self.ui.shutDownButton.clicked.connect(self.shutdown_click)
         self.ui.shutDownButton.setStyleSheet("background-color: red")
+        self.ui.start_loadClasses_PB.setEnabled(False)
 
         #RECORDING WINDOW
 
@@ -58,6 +59,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.start_recording_button.clicked.connect(self.startRecording)
         self.ui.stop_recording_button.clicked.connect(self.stopRecording)
         self.ui.ChooseRobotcomboBox.currentIndexChanged.connect(self.chooseRobot)
+        self.ui.stop_recording_button.setEnabled(False)
 
 
         # LEARNING WINDOW
@@ -144,9 +146,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
 
         # Front page params
-        self.robot = 'roslaunch roy_dmp ur3_gazebo_with_dmp.launch'
+        self.robot = 'roslaunch roy_dmp ur3_with_dmp.launch'
         self.IP = '192.168.2.192'
-        self.sim = True
+        self.sim = False
         self.process = QProcess(self)
         self.linkName = "rg2_eef_link"
 
@@ -202,7 +204,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.sim:
                self.robot = 'roslaunch roy_dmp ur3_gazebo_with_dmp.launch' 
             else:
-                self.robot = 'roslaunch ur_dmp ur3_with_dmp.launch'
+                self.robot = 'roslaunch roy_dmp ur3_with_dmp.launch'
         elif text == 'UR5':
             if self.sim:
                 self.robot = 'roslaunch roy_dmp ur5_gazebo_with_dmp.launch'
@@ -219,12 +221,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def start_click(self):
         program = self.robot
         self.process.start(program)
+        self.ui.startButton.setEnabled(False)
+        self.ui.startButton.setText("Connecting...")
+        self.ui.startButton.setStyleSheet("color: black")
+        QApplication.processEvents()
+        sleep(5)
         print("Finished")
+        self.ui.start_loadClasses_PB.setEnabled(True)
+        self.ui.startButton.setText("Connected to Robot")
+        self.ui.startButton.setStyleSheet("color: green")
 
     def shutdown_click(self):
         self.ui.shutDownButton.setStyleSheet("background-color: gray")
         self.ui.shutDownButton.setText("Shutting down the program. Please wait")
-        
+        QApplication.processEvents()
         self.process.terminate()
         self.process.waitForFinished()
         self.process.kill()
@@ -242,6 +252,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # print(self.dmp_record_name)
 
     def startRecording(self):
+        self.ui.start_recording_button.setEnabled(False)
+        self.ui.start_recording_button.setText("Recording")
+        self.ui.start_recording_button.setStyleSheet("background-color: gray")
+        self.ui.stop_recording_button.setEnabled(True)
         if self.dmp_record ==1:
             self.dmp_record_JS.start_record("Testing",self.arm,self.dmp_record_name)
         elif self.dmp_record == 0:
@@ -251,43 +265,64 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
     def stopRecording(self):
         self.dmp_record_JS.stop_record()
+        self.ui.start_recording_button.setEnabled(True)
+        self.ui.stop_recording_button.setText("Recording saved as: " + self.dmp_record_name)
+        self.ui.stop_recording_button.setEnabled(False)
+        self.ui.stop_recording_button.setStyleSheet("color: green")
+        self.ui.start_recording_button.setStyleSheet("background-color: white")
+        self.ui.start_recording_button.setText("Start Recording")
     def loadEERec(self):
         self.dmp_load_type = 0
+        self.change_DMP_button()
     def loadJSRec(self):
         # self.dmp_mg.loadMotionFromJointStates(self.dmp_record_name_load,self.arm)
         self.dmp_load_type = 1
+        self.change_DMP_button()
 
     def setdt(self,text):
         try:
             self.dmp_param_dt = float(text)
         except:
             print("Wrong Type")
+        self.change_DMP_button()
     def setK(self,text):
         try:
             self.dmp_param_K = float(text)
         except:
             print("Wrong Type")
+        self.change_DMP_button()
     def setD(self,text):
         try:
             self.dmp_param_D = float(text)
         except:
             print("Wrong Type")
+        self.change_DMP_button()
     def setBasisfunc(self,text):
         try:
             self.dmp_param_basisfunc = int(text)
         except:
             self.dmp_param_basisfunc = None
             print("Wrong Type")
+        self.change_DMP_button()
     def loadNamerec(self):
         self.dmp_record_name_load = self.ui.load_name_rec_comboBox.currentText()
+        self.change_DMP_button()
     def saveWeights(self,text):
         self.dmp_weight_name = str(text)
+        self.change_DMP_button()
     def generateDMP(self):
         if self.dmp_load_type == 0:
             self.dmp_mg.loadMotionFromEndEffector
         else:
             self.dmp_mg.loadMotionFromJointStates(self.dmp_record_name_load,self.arm,self.dmp_param_dt,self.dmp_param_K,self.dmp_param_D,self.dmp_param_basisfunc)
-        
+        self.ui.generate_DMP_button.setStyleSheet("color: green")
+        self.ui.generate_DMP_button.setText("DMP generated")
+        self.ui.generate_DMP_button.setEnabled(False)
+
+    def change_DMP_button(self):
+        self.ui.generate_DMP_button.setStyleSheet("background-color: white")
+        self.ui.generate_DMP_button.setEnabled(True)
+        self.ui.generate_DMP_button.setText("Generate DMP")
     def browse_weights(self):
         self.ui.set_DMP_comboBox.clear()
 
@@ -517,6 +552,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def getDMP_plan(self):
         pass
     def load_classes(self):
+        self.ui.start_loadClasses_PB.setText(str("Starting application. Please wait..."))
+        QApplication.processEvents()
         self.dmp_record_JS = RecordFromJointState()
         self.dmp_mg = motionGeneration()
         self.dmp_me = motionExecution()
