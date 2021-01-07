@@ -157,7 +157,7 @@ class Ui_MainWindow(object):
         self.rec_EE_radio_button.setObjectName("rec_EE_radio_button")
         self.gridLayout_8.addWidget(self.rec_EE_radio_button, 0, 0, 1, 1)
         self.label_2 = QtWidgets.QLabel(self.frame_7)
-        self.label_2.setMaximumSize(QtCore.QSize(16777215, 20))
+        self.label_2.setMaximumSize(QtCore.QSize(16777215, 199))
         font = QtGui.QFont()
         font.setItalic(True)
         self.label_2.setFont(font)
@@ -176,7 +176,7 @@ class Ui_MainWindow(object):
         self.rec_JS_radio_button.setMaximumSize(QtCore.QSize(16777215, 40))
         self.rec_JS_radio_button.setObjectName("rec_JS_radio_button")
         self.label_3 = QtWidgets.QLabel(self.splitter_9)
-        self.label_3.setMaximumSize(QtCore.QSize(16777215, 20))
+        self.label_3.setMaximumSize(QtCore.QSize(16777215, 199))
         self.label_3.setObjectName("label_3")
         self.gridLayout_5.addWidget(self.splitter_9, 0, 0, 1, 1)
         self.gridLayout_9.addWidget(self.splitter_3, 0, 0, 1, 1)
@@ -791,7 +791,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         self.Tab.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -803,10 +803,22 @@ class Ui_MainWindow(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt; font-weight:600;\">Welcome to this robot DMP application.</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt; font-weight:600;\">Welcome to my robot DMP application.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The goal of this application is reduce the steppingstone that non-experts has to start working with robots. Ths is done by implementing Dynamic Movement Primitives and combine them with an intuitiv graphical user interface. The application is currently developed for use on Universal Robots, and have been testet on the UR3. It can be used both on real robots and in a simulation.</p>\n"
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Author: Roy Ove Eriksen</p></body></html>"))
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This application is developed as a part of my Master thesis at Universitat Politecnica de Catalunya .</p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Author: Roy Ove Eriksen</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Date: Autumn 2020</p></body></html>"))
         self.RobotIPLabel.setText(_translate("MainWindow", "Robot IP:"))
         self.IPLineEdit.setPlaceholderText(_translate("MainWindow", "192.168.1.128"))
         self.simulationCheckBox.setText(_translate("MainWindow", "Simulation"))
@@ -818,9 +830,12 @@ class Ui_MainWindow(object):
         self.start_loadClasses_PB.setText(_translate("MainWindow", "Start DMP application"))
         self.label_15.setText(_translate("MainWindow", "Name of recording:"))
         self.rec_EE_radio_button.setText(_translate("MainWindow", "End-Effector"))
-        self.label_2.setText(_translate("MainWindow", "World position of the tool point"))
+        self.label_2.setText(_translate("MainWindow", "Records the pose of the end-effector. This takes as input a ROS Pose( Position and Orientation in quaternion)\n"
+" and are listning on the topic /end_effector_pose\n"
+" To use this feature an external source needs to publish to the /end_effector_pose topic"))
         self.rec_JS_radio_button.setText(_translate("MainWindow", "Joint_States"))
-        self.label_3.setText(_translate("MainWindow", "TextLabel"))
+        self.label_3.setText(_translate("MainWindow", "Records joint values in radians that are published by the robot_state_publisher on topic /joint_states\n"
+" The recordings are saved as Rosbags in the /Data/rosbag_recordings "))
         self.start_recording_button.setText(_translate("MainWindow", "Start"))
         self.stop_recording_button.setText(_translate("MainWindow", "Stop"))
         self.Tab.setTabText(self.Tab.indexOf(self.Recording_tab), _translate("MainWindow", "Recording"))
@@ -836,7 +851,7 @@ class Ui_MainWindow(object):
         self.label_18.setText(_translate("MainWindow", "D"))
         self.dmp_D_param_lineedit.setPlaceholderText(_translate("MainWindow", "Default: 1"))
         self.label_19.setText(_translate("MainWindow", "# basis_func"))
-        self.dmp_basisfunc_param_lineedit.setPlaceholderText(_translate("MainWindow", "Default: 120"))
+        self.dmp_basisfunc_param_lineedit.setPlaceholderText(_translate("MainWindow", "Default: 20 per second of recording"))
         self.label_20.setText(_translate("MainWindow", "name of recording"))
         self.label_21.setText(_translate("MainWindow", "name of output file"))
         self.save_name_dmp_lineedit.setPlaceholderText(_translate("MainWindow", "Default: Same name as recording unless specified"))

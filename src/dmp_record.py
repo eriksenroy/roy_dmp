@@ -41,6 +41,7 @@ class RecordFromEndEffector():
         self.motion_name = "no_motion_name"
         self.current_bag_name = "no_bag_name"
         self.rosbag_file_path = '/home/roy/catkin_ws/src/roy_dmp/data/rosbag_recordings'
+        self.end_effector_subs = "/end_effector_pose"
         # Subscribe to a PoseStamped topics
         rospy.loginfo("Subscribing to topics...")
         for idx, pose_topic in enumerate(pose_topics):

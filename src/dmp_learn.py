@@ -224,7 +224,7 @@ class motionGeneration():
         if tau != None:
             print("input tau != None")
             print( "its: " + str(tau))
-            this_tau = tau
+            this_tau = tau*2
         else:
             print( "input tau == None")
             this_tau = self.resp_from_makeLFDRequest.tau -1 # HEY WE NEED TO PUT -1 SEC HERE, WHY?? BUG?

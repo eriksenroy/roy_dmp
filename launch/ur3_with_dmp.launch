@@ -11,7 +11,7 @@
 
   <include file="$(find ur_robot_driver)/launch/ur3_bringup.launch" >
       <arg name="robot_ip" value="192.168.1.128"/>
-      <!-- <arg name="kinematics_config" value="${HOME}/my_robot_calibration.yaml"/> -->
+      <arg name="kinematics_config" value="/home/roy/my_robot_calibration.yaml"/>
   </include>
 
   <include file="$(find ur3_moveit_config)/launch/ur3_moveit_planning_execution.launch">

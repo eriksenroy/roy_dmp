@@ -5,7 +5,7 @@
 # from roy_dmp.src.dmp_execute import motionExecution
 import sys
 import os
-from time import sleep
+import time
 
 from PyQt5 import QtGui
 import rospy
@@ -30,6 +30,10 @@ def get_joints():
     # rospy.init_node("test_extrinsics_node")
     js = rospy.wait_for_message("joint_states",JointState)
     return js
+
+# def check_service():
+#     check_srv = rospy.wait_for_service('learn_dmp_from_demo')
+#     return check_srv
 
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -198,7 +202,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def setIPRobot(self,text):
         self.IP = text
-    def chooseRobot(self,text):
+    def chooseRobot(self):
         text = self.ui.ChooseRobotcomboBox.currentText()
         if text == 'UR3':
             if self.sim:
@@ -219,14 +223,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 self.robot = 'roslaunch ur_gazebo ur10.launch'
 
     def start_click(self):
+        self.chooseRobot()
         program = self.robot
         self.process.start(program)
         self.ui.startButton.setEnabled(False)
         self.ui.startButton.setText("Connecting...")
         self.ui.startButton.setStyleSheet("color: black")
         QApplication.processEvents()
-        sleep(5)
-        print("Finished")
+        # check_srv=check_service()
+        print("Service test")
+        # print(check_srv)
+        print("service test")
         self.ui.start_loadClasses_PB.setEnabled(True)
         self.ui.startButton.setText("Connected to Robot")
         self.ui.startButton.setStyleSheet("color: green")
@@ -257,7 +264,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.start_recording_button.setStyleSheet("background-color: gray")
         self.ui.stop_recording_button.setEnabled(True)
         if self.dmp_record ==1:
-            self.dmp_record_JS.start_record("Testing",self.arm,self.dmp_record_name)
+            self.dmp_record_JS.start_record(self.dmp_record_name,self.arm,self.dmp_record_name)
         elif self.dmp_record == 0:
             pass
 
@@ -311,13 +318,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.dmp_weight_name = str(text)
         self.change_DMP_button()
     def generateDMP(self):
-        if self.dmp_load_type == 0:
-            self.dmp_mg.loadMotionFromEndEffector
-        else:
-            self.dmp_mg.loadMotionFromJointStates(self.dmp_record_name_load,self.arm,self.dmp_param_dt,self.dmp_param_K,self.dmp_param_D,self.dmp_param_basisfunc)
-        self.ui.generate_DMP_button.setStyleSheet("color: green")
-        self.ui.generate_DMP_button.setText("DMP generated")
-        self.ui.generate_DMP_button.setEnabled(False)
+        try:
+            if self.dmp_load_type == 0:
+                self.dmp_mg.loadMotionFromEndEffector
+            else:
+                self.dmp_mg.loadMotionFromJointStates(self.dmp_record_name_load,self.arm,self.dmp_param_dt,self.dmp_param_K,self.dmp_param_D,self.dmp_param_basisfunc)
+            self.ui.generate_DMP_button.setStyleSheet("color: green")
+            self.ui.generate_DMP_button.setText("DMP generated")
+            self.ui.generate_DMP_button.setEnabled(False)
+        except:
+            self.ui.generate_DMP_button.setStyleSheet("background-color: red")
+            self.ui.generate_DMP_button.setText("Recording not valid. Choose another.")
+           
 
     def change_DMP_button(self):
         self.ui.generate_DMP_button.setStyleSheet("background-color: white")
@@ -563,17 +575,29 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         st = self.dmp_me.sendTrajectoryAction(self.path_plan,self.initial_JS)
         print(st)
     def collision_check(self):
-        
+        init_time_WP = time.time()
         initial_pose = self.initial_JS
         final_pose = self.goal_JS
         print("start path plan")
-        self.path_plan = self.dmp_mg.getPlan(initial_pose,final_pose,-1,[],None,self.tau,dt=0.008)
+        init_time = time.time()
+        self.path_plan = self.dmp_mg.getPlan(initial_pose,final_pose,-1,[],None,self.tau,self.dmp_param_dt)
+        fin_time = time.time()
+        print ("Computing path done, took: " + str(fin_time - init_time))
         # print(self.path_plan.plan.points[0].positions)
+        init_time_RT = time.time()
         robot_traj = self.dmp_me.robotTrajectoryFromPlan(self.path_plan,self.dmp_me.arm)
+        fin_time_RT = time.time()
+        print ("Converting to Robot trajectory done, took: " + str(fin_time_RT - init_time_RT))
         print("checking collisions")
+        init_time_CC = time.time()
         validity = self.dmp_me.checkTrajectoryValidity(robot_traj)
+        fin_time_CC = time.time()
+        print ("Collision checks done, took: " + str(fin_time_CC - init_time_CC))
+        init_time_PP = time.time()
         self.dmp_me.pathPublish(self.path_plan,self.linkName)
-        print("OK")
+        fin_time_PP = time.time()
+        print("Doing FK and publishing path took, "+ str(fin_time_PP - init_time_PP))
+        print("The whole process took , "+ str(fin_time_PP - init_time_WP))
         # check_ik = self.dmp_me.get_IK_from_Quart(self.result_FK_goal)
         # print(check_ik)
         print(validity)
