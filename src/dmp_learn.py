@@ -2,19 +2,14 @@
 
 import rospy
 import subprocess, yaml
-import math
 from os.path import join
 import numpy as np
 import rosbag
-import matplotlib.pyplot as plt
 from tf.transformations import euler_from_quaternion
 from dmp.srv import GetDMPPlan, GetDMPPlanRequest,LearnDMPFromDemo, LearnDMPFromDemoRequest, SetActiveDMP, SetActiveDMPRequest
 from dmp.msg import DMPTraj, DMPData, DMPPoint
 from sensor_msgs.msg import JointState
-from moveit_msgs.srv import GetPositionFK, GetPositionFKRequest, GetPositionFKResponse, GetPositionIK, GetPositionIKRequest, GetPositionIKResponse
-from scipy.interpolate import interp1d
 import time
-# from dmp_execute import motionEx
 DEFAULT_JOINT_STATES = "/joint_states"
 DEFAULT_FK_SERVICE = "/compute_fk"
 DEFAULT_IK_SERVICE = "/compute_ik"
@@ -46,37 +41,26 @@ class motionGeneration():
         return list_to_iterate, msg_list        
 
 
-    def printNamesAndValues():
-        """Given a group, print in screen in a pretty way joint names and it's values"""
-        pass
-
-    def loadMotionFromEndEffector():
-        """Load motion from the bag name given """
-        pass
+   
 
     def loadMotionFromJointStates(self, bagname, joints,_dt=000.8,_K=100,_D=2.0 * np.sqrt(100),_num_bases=None):
         """Load motion from the bag name given """
         # Get bag info
         file = join(self.rosbag_file_path,bagname)
         self.info_bag = yaml.load(subprocess.Popen(['rosbag', 'info', '--yaml', file],stdout=subprocess.PIPE).communicate()[0])
-        bases_rel_to_time = math.ceil(self.info_bag['duration'] * 20) # empirically for every second 20 bases it's ok
 
         # Create a DMP from the number of joints in the trajectory
         dims = len(joints)
         dt = _dt
         K = _K
         D = _D
-        # if _num_bases==None:
-        #     num_bases = bases_rel_to_time
-        # else:
         num_bases = _num_bases
 
         traj = []
         bag = rosbag.Bag(file)
         first_point = True
         for topic, msg, t in bag.read_messages(topics=[DEFAULT_JOINT_STATES]):
-            # Get the joint and its values
-            js = msg
+
             # Process interesting joints
             names, positions = self.getNamesAndMsgList(joints,msg)
             # Append interesting joints here
@@ -107,12 +91,7 @@ class motionGeneration():
         #rospy.loginfo("DMP result: " + str(self.resp_from_makeLFDRequest))
         motion_dict = self.saveMotionYAML(bagname + ".yaml", bagname, joints, self.motion_x0, self.motion_goal, self.resp_from_makeLFDRequest, time)
         return motion_dict        
-      
 
-    def loadMotionFromBagJointStatesAndRemoveJerkiness(self, bagname, joints, frequency_to_downsample=15):
-        """Load motion from the bag name given and remove jerkiness by downsampling and
-        interpolating with a cubic spline """        
-        pass
 
     def saveMotionYAML(self, yamlname, name, joints, initial_pose, final_pose, computed_dmp, time):
         """Given the info of the motion computed with the DMP server save it into a yaml file.
@@ -129,7 +108,7 @@ class motionGeneration():
                         "final_pose" : final_pose,
                         "computed_dmp" : computed_dmp,
                         "duration" : time}
-        #rospy.loginfo("motion_dict:\n" + str(motion_dict))
+        rospy.loginfo("motion_dict:\n" + str(motion_dict))
         file = join(self.weights_file_path, yamlname)
         try:
             with open(file, "w") as f:
@@ -138,26 +117,18 @@ class motionGeneration():
         except:
             rospy.logerr("Cannot save weight file, Check if the directory of the weight file exist")
             self.result = "failed"
-        # stream = file(yamlname, "w")
-        # yaml.dump(motion_dict, stream)
-        # self.resp_from_makeLFDRequest = motion_dict["computed_dmp"]
         return motion_dict        
 
     def loadMotionYAML(self, yamlname):
         """Given a yamlname which has a motion saved load it and set it as active in the DMP server"""
         file = join(self.weights_file_path, yamlname)
-        # try:
-        #     stream = file(yamlname, "r")
-        # except:
-        #     print("Can not find file: " + yamlname)
-        #     return None
+
         try:
             with open(file, "r") as f:
                 motion_dict = yaml.load(f)
         except:
             print("Can not find file: " + yamlname)
             return None 
-        # motion_dict = yaml.load(stream)
         # set it as the active DMP on the dmp server
         self.makeSetActiveRequest(motion_dict['computed_dmp'].dmp_list)
         self.resp_from_makeLFDRequest = motion_dict['computed_dmp']
@@ -196,47 +167,24 @@ class motionGeneration():
         except rospy.ServiceException as e:
             print("Service call failed: %s" %e)
 
-    def getPlan(self, initial_pose, goal_pose, seg_length=-1, initial_velocities=[], t_0 = None, tau=None, dt=None, integrate_iter=None,goal_thresh=[]):
-        """Generate a plan...
-        @initial_pose list of double initial pose for the gesture
-        @goal_pose list of double final pose of the gesture
-        @initial_velocities TODO list of double : initial velocities
-        @t_0 TODO double initial time
-        @goal_thresh TODO list of double : threshold for every joint
-        @seg_length TODO integer... with -1 it's plan until convergence of goal, see docs of DMP
-        @tau TODO
-        @dt TODO
-        @integrate_iter TODO"""
+    def getPlan(self, initial_pose, goal_pose, seg_length=-1, initial_velocities=[], t_0 = None, tau=5, dt=0.008, integrate_iter=1,goal_thresh=[]):
+        """Generate a plan..."""
+
         x_0 = initial_pose
-        #x_0 = [0.137,-0.264,1.211,0.0395796940422, 0.0202532964694, 0.165785921829]
         x_dot_0 = [0.0] * len(initial_pose)
         t_0 = 0
-        
+        this_dt= dt
+        this_tau = tau*2
+        this_integrate_iter = integrate_iter
         goal = goal_pose
-        
-        #goal = [0.259,-0.252,1.289, 0.0212535586323, -0.00664429330438, 0.117483470173]
         if len(goal_thresh) > 0:
             this_goal_thresh = goal_thresh
         else:
             this_goal_thresh = [0.01] * len(initial_pose)
         seg_length = seg_length          #Plan until convergence to goal is -1
-        #tau = 2 * self.resp_from_makeLFDRequest.tau       #Desired plan should take twice as long as demo
-        if tau != None:
-            print("input tau != None")
-            print( "its: " + str(tau))
-            this_tau = tau*2
-        else:
-            print( "input tau == None")
-            this_tau = self.resp_from_makeLFDRequest.tau -1 # HEY WE NEED TO PUT -1 SEC HERE, WHY?? BUG?
+
         rospy.logwarn("tau is: " + str(this_tau))
-        if dt != None:
-            this_dt = dt
-        else:
-            this_dt = 0.05
-        if integrate_iter != None:
-            this_integrate_iter = integrate_iter
-        else:
-            this_integrate_iter = 1 #5       #dt is rather large, so this is > 1
+
         plan_resp = self.makePlanRequest(x_0, x_dot_0, t_0, goal, this_goal_thresh,
                                seg_length, this_tau, this_dt, this_integrate_iter)
         return plan_resp

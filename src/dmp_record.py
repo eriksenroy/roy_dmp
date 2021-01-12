@@ -6,12 +6,6 @@ import rosbag
 from os.path import join
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import JointState
-# from moveit_msgs.srv import GetPositionIKRequest, GetPositionIKResponse, GetPositionIK
-# from moveit_msgs.msg import MoveItErrorCodes, RobotTrajectory
-# from actionlib import SimpleActionClient, GoalStatus
-# import matplotlib.pyplot as plt
-# import time
-# import tf
 
 DEFAULT_IK_SERVICE = "/compute_ik"
 DEFAULT_JOINT_STATES = "/joint_states"

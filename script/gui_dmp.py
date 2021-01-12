@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-# from roy_dmp.src.dmp_record import RecordFromJointState
-# from roy_dmp.src.dmp_learn import motionGeneration
-# from roy_dmp.src.dmp_execute import motionExecution
+
 import sys
 import os
 import time
@@ -14,8 +12,6 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QWidget,QHBoxLayout, QMainWindow, QPushButton, QMessageBox, QBoxLayout,QVBoxLayout
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-# from python_qt_binding.QtGui import *
-# from python_qt_binding.QtCore import *
 import rviz
 from ui_dmp import Ui_MainWindow
 sys.path.append("/home/roy/catkin_ws/src/roy_dmp/src")
@@ -27,7 +23,7 @@ import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 def get_joints():
-    # rospy.init_node("test_extrinsics_node")
+    
     js = rospy.wait_for_message("joint_states",JointState)
     return js
 
@@ -96,6 +92,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.get_CS_goal_robot_PB.clicked.connect(self.getCS_goal_robot)
 
         self.ui.execute_collisionCheck_PB.clicked.connect(self.collision_check)
+        
+        self.ui.execute_collisionCheck_PB.setText("Please set an active DMP first")
+        self.ui.execute_collisionCheck_PB.setEnabled(False)
+
         self.ui.execute_plan_pushButton.clicked.connect(self.execute_plan)
 
         #LINE EDIT TEXT CHANGES
@@ -167,7 +167,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.dmp_param_dt = 0.008
         self.dmp_param_K = 100
         self.dmp_param_D = 2.0 * np.sqrt(self.dmp_param_K)
-        self.dmp_param_basisfunc = None
+        self.dmp_param_basisfunc = 50
         self.directory_recording = "/home/roy/catkin_ws/src/roy_dmp/data/rosbag_recordings"
 
         # Param executing page
@@ -308,7 +308,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         try:
             self.dmp_param_basisfunc = int(text)
         except:
-            self.dmp_param_basisfunc = None
+            self.dmp_param_basisfunc = 50
             print("Wrong Type")
         self.change_DMP_button()
     def loadNamerec(self):
@@ -349,6 +349,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.active_DMP = self.ui.set_DMP_comboBox.currentText()
     def sendActiveDMP(self):
         self.dmp_mg.loadMotionYAML(self.active_DMP)
+        self.ui.execute_collisionCheck_PB.setEnabled(True)
+        self.ui.execute_collisionCheck_PB.setText("Collision Check")
     def setJS_init_0(self,text):
         try:
             self.ui.execute_collisionCheck_PB.setStyleSheet("background-color: gray")
@@ -572,7 +574,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(1)
 
     def execute_plan(self):
-        st = self.dmp_me.sendTrajectoryAction(self.path_plan,self.initial_JS)
+        st = self.dmp_me.sendTrajectoryAction(self.path_plan,self.initial_JS,self.sim)
         print(st)
     def collision_check(self):
         init_time_WP = time.time()
